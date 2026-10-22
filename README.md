@@ -152,90 +152,172 @@ Fixed supply, extremely slow release, self-custody, and the ability to trade on 
 In short, what problem is XPi trying to solve?
 Creating an asset scarce enough to have long-term store-of-value potential, yet simple enough for ordinary people to own directly by staking XLM on a mature, low-cost public network.
 
-XPi Staking ToolsStake XLM on the Stellar network to earn XPi through a Soroban smart contract.
-Contract ID: CDQ4OO3FU3CBNVWZX2GDU4BQQNQFAHBITTXULTVIECY4OMJGTM33M73H
-Minimum stake: 31.4 XLM
-Reward rate (approximate, on-chain): ~0.0000003 XPi per day per 31.4 XLM (scales roughly linearly)
-Users keep full control of their private keys
-1. Node.js CLI Tool (Ubuntu)A simple command-line tool to stake, unstake, claim rewards, and check balances.Requirements
-Ubuntu 20.04 or newer (fresh install is fine)
-Internet connection
-Step 1: Install Node.jsBashsudo apt update
+# XPi Staking Tools
+
+Stake XLM on the Stellar network to earn XPi through a Soroban smart contract.
+
+- **Contract ID**: `CDQ4OO3FU3CBNVWZX2GDU4BQQNQFAHBITTXULTVIECY4OMJGTM33M73H`
+- **Minimum stake**: 31.4 XLM
+- **Approximate reward**: ~0.0000003 XPi per day per 31.4 XLM (scales roughly linearly)
+- Users keep full control of their private keys
+
+---
+
+## 1. Node.js CLI Tool (Ubuntu)
+
+A simple command-line tool to stake, unstake, claim rewards, and check your balance.
+
+### Requirements
+
+- Ubuntu 20.04 or newer
+- Internet connection
+
+### Step 1: Install Node.js
+
+```bash
+sudo apt update
 sudo apt install -y curl
 curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
 sudo apt install -y nodejs
 node -v
-npm -vStep 2: Download the scriptCreate a working folder and save the script:Bashmkdir ~/xpi-staking
-cd ~/xpi-stakingCreate the file stake-claim.js and paste the provided Node.js code into it (or download it from this repository).Step 3: Install dependenciesBashnpm init -y
-npm install @stellar/stellar-sdkStep 4: Run the toolBashnode stake-claim.jsYou will be asked for your Stellar secret key (starts with S...).Menu options:
-Stake XLM (minimum 31.4)
-Unstake XLM (press Enter or type 0 to unstake all)
-Claim XPi rewards
-View current stake (get_stake)
-View pending rewards (pending)
-Exit
-Important notes
-Never share your secret key.
-The first time you stake, make sure your account has enough XLM for the stake amount + network fees.
-Rewards are calculated on-chain. Use option 5 to check pending rewards before claiming.
-You can unstake at any time and receive your XLM back.
-Optional: Run in background (advanced)Bash# Example using screen
-sudo apt install screen
-screen -S xpi
+npm -v
+```
+
+### Step 2: Create project folder
+
+```bash
+mkdir ~/xpi-staking
+cd ~/xpi-staking
+```
+
+Download or create the file `stake-claim.js` and paste the Node.js staking script into it.
+
+### Step 3: Install dependencies
+
+```bash
+npm init -y
+npm install @stellar/stellar-sdk
+```
+
+### Step 4: Run the tool
+
+```bash
 node stake-claim.js
-# Press Ctrl+A then D to detach2. Android App – Direct Install (APK)The easiest way for mobile users.Requirements
-Android phone (Android 8.0 or higher recommended)
-Allow installation from unknown sources
-Installation steps
-Download XPi-Staking-mining.apk from the Releases section of this repository.
-Open the APK file on your phone.
-If prompted, allow installation from this source.
-Open the app.
-Create a new Stellar wallet or import an existing one (secret key).
-Add the XPi trustline if required by the app.
-Stake XLM (minimum 31.4 XLM) and claim rewards inside the app.
-Security tips
-Only download the APK from the official GitHub Releases page.
-Back up your secret key / recovery phrase offline.
-The app interacts directly with the Stellar network; the developers do not hold your keys.
-3. Build the Android App from Source (Ubuntu + Android Studio)For developers or users who want to compile the app themselves.Requirements
-Ubuntu 22.04 or newer
-At least 8 GB RAM (16 GB recommended)
-~15 GB free disk space
-Step 1: Install Java and required packagesBashsudo apt update
+```
+
+You will be asked for your Stellar secret key (starts with `S...`).
+
+**Menu:**
+
+1. Stake XLM (minimum 31.4)
+2. Unstake XLM (press Enter or type `0` to unstake all)
+3. Claim XPi rewards
+4. View current stake
+5. View pending rewards
+6. Exit
+
+### Important
+
+- Never share your secret key.
+- Make sure your account has enough XLM for the stake + network fees.
+- You can unstake at any time.
+
+---
+
+## 2. Android App – Direct Install (APK)
+
+### Requirements
+
+- Android 8.0 or higher
+- Allow installation from unknown sources
+
+### Installation
+
+1. Download `XPi-Staking-mining.apk` from the **Releases** page of this repository.
+2. Open the APK file on your phone.
+3. Allow installation if prompted.
+4. Open the app.
+5. Create a new wallet or import your existing secret key.
+6. Stake XLM (minimum 31.4) and claim rewards inside the app.
+
+### Security
+
+- Only download the APK from the official GitHub Releases.
+- Back up your secret key offline.
+- The developers never hold your private keys.
+
+---
+
+## 3. Build the Android App from Source (Ubuntu + Android Studio)
+
+### Requirements
+
+- Ubuntu 22.04 or newer
+- At least 8 GB RAM
+- ~15 GB free disk space
+
+### Step 1: Install Java
+
+```bash
+sudo apt update
 sudo apt install -y openjdk-17-jdk git unzip wget
-java -versionStep 2: Install Android Studio
-Download Android Studio from the official site:
-https://developer.android.com/studio
-Extract and install:
-Bashcd ~/Downloads
+java -version
+```
+
+### Step 2: Install Android Studio
+
+1. Download from: https://developer.android.com/studio
+2. Extract and run:
+
+```bash
 tar -xzf android-studio-*.tar.gz
 sudo mv android-studio /opt/
 /opt/android-studio/bin/studio.sh
-Follow the setup wizard. Install:
-Android SDK
-Android SDK Platform (API 34 or latest)
-Android SDK Build-Tools
-Android Emulator (optional)
+```
 
-Step 3: Get the source codeBashcd ~
-# If the source is provided as app.zip
+3. Complete the setup wizard and install:
+   - Android SDK
+   - Android SDK Platform (API 34+)
+   - Android SDK Build-Tools
+
+### Step 3: Get the source
+
+```bash
 unzip app.zip -d xpi-android
-cd xpi-androidOr clone if the full source is in this repository.Step 4: Open the project in Android Studio
-Launch Android Studio.
-Choose Open and select the xpi-android folder.
-Wait for Gradle sync to finish (it may download dependencies).
-If prompted, accept SDK licenses and install any missing components.
-Step 5: Build the APK
-Go to Build → Build Bundle(s) / APK(s) → Build APK(s).
-Wait for the build to complete.
-Click the notification link to locate the APK, usually at:
-app/build/outputs/apk/debug/app-debug.apk
-or
-app/build/outputs/apk/release/app-release.apk
-Step 6: Install on your phone
-Transfer the APK to your Android device and install it, or
-Connect your phone via USB, enable USB debugging, and click the Run button in Android Studio.
+cd xpi-android
+```
 
-Never share your secret key with anyone.
-Contract: CDQ4OO3FU3CBNVWZX2GDU4BQQNQFAHBITTXULTVIECY4OMJGTM33M73H
+### Step 4: Open in Android Studio
+
+1. Open Android Studio → **Open** → select the `xpi-android` folder.
+2. Wait for Gradle sync to finish.
+
+### Step 5: Build APK
+
+1. **Build → Build Bundle(s) / APK(s) → Build APK(s)**
+2. Find the APK at:
+   - `app/build/outputs/apk/debug/app-debug.apk`
+
+### Step 6: Install
+
+Transfer the APK to your phone and install it, or connect the phone via USB and click **Run** in Android Studio.
+
+---
+
+## Reward Table
+
+| Staked XLM | Approx. XPi / day |
+|------------|-------------------|
+| 31.4       | 0.0000003         |
+| 314        | 0.0000031         |
+| 3,140      | 0.000031          |
+| 31,400     | 0.00031           |
+
+---
+
+## Disclaimer
+
+Use at your own risk. Only stake what you can afford. Always verify the contract ID on [Stellar Expert](https://stellar.expert) before interacting.
+
+**Contract**: `CDQ4OO3FU3CBNVWZX2GDU4BQQNQFAHBITTXULTVIECY4OMJGTM33M73H`
+
