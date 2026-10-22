@@ -1,19 +1,27 @@
 # xpi-stellar-mining
 Crypto for everyone in 7000 year 63milion token - hardcap
+
 XPi: A Scarce Digital Asset on Stellar for Long-Term OwnershipXPi is a fixed-supply token issued on the Stellar network. On-chain data from Stellar Expert shows a total supply of exactly 63,000,000 XPi, issued by account GDOFJEZ3FUWAC2EVHPRMJPSWPOD3KJF7FTXFZIERFFPB2VMTRQLZFUEF under the domain xgoldmining.com. The issuer account is locked, authorization flags are set to none, and the first transaction occurred on 18 July 2025. The asset currently has hundreds of trustlines, tens of thousands of payments and trades, and active order books on Stellar’s built-in DEX.The project is designed around three principles: fixed scarcity, slow and transparent distribution, and accessibility through ordinary Stellar wallets. Less than 15% of the supply is retained by the operating group and is intended to remain largely uncirculated, serving a protective role similar to early Bitcoin addresses that have stayed dormant. The remaining supply is released at a fixed rate of 21 XPi per day through a Soroban smart contract. At this pace, the community portion requires roughly 7,000 years to be fully distributed.Users obtain XPi by staking XLM in the contract. Rewards scale roughly linearly with the amount staked (for example, 31.4 XLM yields approximately 0.0000003 XPi per day). Users retain full control of their private keys, no KYC is required for staking, and all logic is verifiable on-chain. Because Stellar nodes can run on ordinary hardware and the network already includes a native DEX, path payments, memos, and low fees, XPi inherits a mature infrastructure rather than building one from scratch.The goal is not short-term trading on centralized exchanges. It is to offer an asset that is scarce enough to function as a long-term store of value and simple enough for ordinary people to own directly.
 50 Frequently Asked Questions (with XPi’s practical advantages integrated)
+
 What is money?
 Money is anything widely accepted as a medium of exchange. XPi aims to serve as a scarce digital asset that people can own directly on Stellar instead of relying solely on trust in a central issuer.
+
 What are the three main functions of money?
 Medium of exchange, unit of account, and store of value. XPi focuses on the store-of-value function through its fixed 63 million supply and very slow daily release of only 21 XPi.
+
 How does fiat currency differ from gold?
 Fiat can be printed at will; gold is naturally scarce. XPi mimics gold’s scarcity while being far easier to divide and transfer because it runs on Stellar.
+
 Why do people need a store of value?
 To protect purchasing power from inflation. XPi’s extremely slow issuance schedule (roughly 7,000 years for the community portion) is designed to limit dilution.
+
 Why is Bitcoin called digital gold?
 Because its supply is capped at 21 million and cannot be arbitrarily increased. XPi also has a fixed supply (63 million) but is much easier for ordinary people to obtain by simply staking XLM.
+
 Why is it hard for average people to mine Bitcoin?
 It requires specialized hardware and large amounts of electricity. With XPi, staking as little as 31.4 XLM is enough to start earning—no mining rigs needed.
+
 Why are private keys important?
 Whoever controls the private key truly owns the coins. XPi users hold their own keys in regular Stellar wallets; balances are not stored on a project server.
 Was early Pi Network real crypto?
