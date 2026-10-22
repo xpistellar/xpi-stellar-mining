@@ -1,2 +1,104 @@
 # xpi-stellar-mining
 Crypto for everyone in 7000 year 63milion token - hardcap
+XPi: A Scarce Digital Asset on Stellar for Long-Term OwnershipXPi is a fixed-supply token issued on the Stellar network. On-chain data from Stellar Expert shows a total supply of exactly 63,000,000 XPi, issued by account GDOFJEZ3FUWAC2EVHPRMJPSWPOD3KJF7FTXFZIERFFPB2VMTRQLZFUEF under the domain xgoldmining.com. The issuer account is locked, authorization flags are set to none, and the first transaction occurred on 18 July 2025. The asset currently has hundreds of trustlines, tens of thousands of payments and trades, and active order books on Stellar’s built-in DEX.The project is designed around three principles: fixed scarcity, slow and transparent distribution, and accessibility through ordinary Stellar wallets. Less than 15% of the supply is retained by the operating group and is intended to remain largely uncirculated, serving a protective role similar to early Bitcoin addresses that have stayed dormant. The remaining supply is released at a fixed rate of 21 XPi per day through a Soroban smart contract. At this pace, the community portion requires roughly 7,000 years to be fully distributed.Users obtain XPi by staking XLM in the contract. Rewards scale roughly linearly with the amount staked (for example, 31.4 XLM yields approximately 0.0000003 XPi per day). Users retain full control of their private keys, no KYC is required for staking, and all logic is verifiable on-chain. Because Stellar nodes can run on ordinary hardware and the network already includes a native DEX, path payments, memos, and low fees, XPi inherits a mature infrastructure rather than building one from scratch.The goal is not short-term trading on centralized exchanges. It is to offer an asset that is scarce enough to function as a long-term store of value and simple enough for ordinary people to own directly.
+50 Frequently Asked Questions (with XPi’s practical advantages integrated)
+What is money?
+Money is anything widely accepted as a medium of exchange. XPi aims to serve as a scarce digital asset that people can own directly on Stellar instead of relying solely on trust in a central issuer.
+What are the three main functions of money?
+Medium of exchange, unit of account, and store of value. XPi focuses on the store-of-value function through its fixed 63 million supply and very slow daily release of only 21 XPi.
+How does fiat currency differ from gold?
+Fiat can be printed at will; gold is naturally scarce. XPi mimics gold’s scarcity while being far easier to divide and transfer because it runs on Stellar.
+Why do people need a store of value?
+To protect purchasing power from inflation. XPi’s extremely slow issuance schedule (roughly 7,000 years for the community portion) is designed to limit dilution.
+Why is Bitcoin called digital gold?
+Because its supply is capped at 21 million and cannot be arbitrarily increased. XPi also has a fixed supply (63 million) but is much easier for ordinary people to obtain by simply staking XLM.
+Why is it hard for average people to mine Bitcoin?
+It requires specialized hardware and large amounts of electricity. With XPi, staking as little as 31.4 XLM is enough to start earning—no mining rigs needed.
+Why are private keys important?
+Whoever controls the private key truly owns the coins. XPi users hold their own keys in regular Stellar wallets; balances are not stored on a project server.
+Was early Pi Network real crypto?
+Many argue it was not, because users did not control private keys and balances lived on centralized systems for a long time. XPi avoids this by being on-chain on Stellar from the start.
+How does scarcity create value?
+Assets that are difficult to inflate tend to better preserve value over time. XPi releases only 21 tokens per day, so new supply grows extremely slowly.
+Can something be both scarce and easy to own?
+Yes. XPi keeps a hard supply cap and ultra-slow distribution while letting anyone participate by staking a modest amount of XLM.
+What is XPi’s total supply?
+Exactly 63,000,000 XPi, verifiable on Stellar Expert. The issuer account is locked.
+How much does the operating group hold?
+Under 15%. This portion is mainly kept as a protective reserve to reduce the chance of large holders accumulating heavily and creating sharp price swings, similar to early dormant Bitcoin addresses.
+How many XPi are distributed each day?
+Only 21. At this rate, the community allocation takes roughly 7,000 years to be fully released.
+Why is slow distribution useful?
+It reduces large early selling pressure and encourages long-term holding rather than quick flips.
+How does XPi staking work?
+Users lock XLM in a Soroban smart contract. Rewards are calculated on-chain and claimed directly to the user’s wallet.
+Are the rewards proportional?
+Yes, roughly linear. For example, 31.4 XLM earns about 0.0000003 XPi per day; larger stakes earn proportionally more.
+Can I get my XLM back?
+Yes. Unstaking returns the XLM to your wallet. You do not lose control of the underlying asset.
+Is KYC required to stake?
+No. You only need a Stellar wallet and some XLM.
+Are XPi transaction fees high?
+No. Stellar fees are usually a tiny fraction of one XLM, making transfers and claims far cheaper than Bitcoin during congestion.
+How long do XPi transactions take?
+A few seconds thanks to the Stellar Consensus Protocol—much faster than Bitcoin’s average confirmation time.
+Does Stellar have a built-in DEX?
+Yes. Users can trade XPi directly on Stellar’s native DEX without waiting for a centralized exchange listing.
+Why doesn’t the project prioritize CEX listings?
+To reduce pump-and-dump cycles. Trading can still happen on Stellar’s integrated DEX.
+What is a trustline?
+An explicit permission you give your wallet to hold a specific asset. It is a Stellar safety feature that helps prevent receiving unwanted tokens.
+Can users verify the contract?
+Yes. Staking logic and total supply are publicly visible on Stellar explorers, offering more transparency than closed systems.
+Is it difficult to run a Stellar node?
+No. Many nodes run on ordinary Ubuntu machines, which makes the network harder to shut down completely.
+If governments restrict stablecoins, does XPi disappear?
+XPi is not a stablecoin and does not rely on a fiat issuer. It exists on the Stellar ledger, and users hold their own keys.
+What weakness of Bitcoin does XPi address?
+Accessibility. Ordinary people can obtain it by staking XLM instead of needing expensive mining equipment.
+How is XPi different from phone check-in projects?
+You must stake a real asset (XLM), receive tokens in a wallet you control, and everything is on-chain from day one rather than stored on a central server.
+Is the 15% team reserve likely to be dumped?
+Its stated purpose is network protection, not short-term liquidity. The locked issuer also limits rule changes.
+Is the in-app counter exact?
+It is only an estimate for user experience. Real rewards are calculated and claimed on-chain.
+Can I stake large amounts?
+Yes. Rewards scale roughly linearly, but the entire system still only releases 21 XPi per day.
+Can XPi be divided into very small units?
+Yes. Stellar supports high divisibility, which is convenient for gradual accumulation and transfers.
+How do Stellar memos help XPi?
+They let users attach notes or reference IDs to transactions, useful for accounting or future payment integrations.
+Does the project promise profits?
+No. It only defines issuance and staking rules. Price is set by the market.
+How do I confirm I have the real XPi?
+Check that the issuer is GDOFJE…LZFUEF and the domain is xgoldmining.com on Stellar Expert before adding the trustline.
+When was XPi’s first transaction?
+18 July 2025, according to Stellar Expert data.
+What do the current trustlines indicate?
+That real users have already added and hold XPi in their own wallets, not just internal database numbers.
+Why does locking the issuer matter?
+It prevents later changes to the rules or unexpected additional issuance, strengthening confidence in the fixed supply.
+Can XPi be used for fast value transfer?
+Yes. Low fees and Stellar’s speed make wallet-to-wallet transfers practical compared with many other networks.
+What shows the seriousness of a 7,000-year schedule?
+The choice to release extremely slowly instead of flooding the market early for liquidity or marketing.
+How should a new user start?
+Create a Stellar wallet, add the official XPi trustline, obtain some XLM, and stake from 31.4 XLM if you want to try.
+What is the biggest risk?
+Market risk and self-custody risk. Only use amounts you can afford to see fluctuate.
+Does XPi need a central server to keep working?
+No. Once on Stellar and in user-controlled wallets, the network can continue via independent nodes.
+How is XPi more convenient than physical gold?
+It is easily divisible, transferable across borders in seconds, and requires no physical vault.
+Is the referral system core to the protocol?
+No. The main mechanism is on-chain XLM staking. Referrals are only an optional user-to-user bonus.
+Are cloud-mining offers run by the developers?
+No. They are arrangements between users.
+Why build on Stellar instead of a new chain?
+Stellar already provides a DEX, Soroban contracts, low fees, and easy node operation, so XPi can focus on its issuance rules.
+Can a small group fully control XPi?
+It is harder than in centralized balance systems because users hold their own keys and the ledger is public. The team allocation is also capped under 15%.
+What makes XPi useful for long-term accumulators?
+Fixed supply, extremely slow release, self-custody, and the ability to trade on Stellar’s native DEX without depending on large centralized exchanges.
+In short, what problem is XPi trying to solve?
+Creating an asset scarce enough to have long-term store-of-value potential, yet simple enough for ordinary people to own directly by staking XLM on a mature, low-cost public network.
