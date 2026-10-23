@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">XPI Mining</string>
+    <string name="login_title">XPI Mining</string>
+    <string name="login_subtitle">Sign in with Stellar secret key (S…)</string>
+    <string name="secret_key">Secret key</string>
+    <string name="login">Sign in</string>
+    <string name="language">Language</string>
+    <string name="logout">Log out</string>
+    <string name="tab_mining">Mining</string>
+    <string name="tab_faq">FAQ</string>
+    <string name="tab_games">Games</string>
+    <string name="wallet_assets">Wallet assets</string>
+    <string name="refresh">Refresh</string>
+    <string name="mining_rate">Mining rate (est.)</string>
+    <string name="mined_session">Mined this session</string>
+    <string name="pending_onchain">Pending on-chain</string>
+    <string name="stake_to_mine">Stake to mining XPi</string>
+    <string name="amount_xlm">XLM amount</string>
+    <string name="unstake">Unstake</string>
+    <string name="claim">Claim</string>
+    <string name="view_stake">View stake</string>
+    <string name="contract">Contract</string>
+    <string name="min_stake">Min stake: %1$s XLM</string>
+    <string name="unstake_hint">XLM (empty = all)</string>
+    <string name="close">Close</string>
+    <string name="privacy_note">Your secret stays on this device only.</string>
+    <string name="faq_title">FAQ</string>
+    <string name="faq_body">Q: How do I create a wallet?\nA: Tap Sign up on the login screen (StellarTerm). Create a key pair, save the private key (S…) safely, then paste it here to log in.\n\nQ: How do I buy XLM?\nA: On StellarTerm, use the exchange to buy XLM, or send XLM from an exchange to your new Stellar public key (G…).\n\nQ: How do I add the XPi trustline?\nA: Open albedo.link → Add trustline → search for XPi from xgoldmining.com → confirm so your wallet can hold XPi rewards.\n\nQ: What is XPI Mining?\nA: Lock XLM in a Soroban contract to earn XPi over time.\n\nQ: Minimum stake?\nA: 31.4 XLM.\n\nQ: How does the counter work?\nA: The live counter is an estimate for UX. Real rewards accrue on-chain; use Claim to receive them.\n\nQ: Is XLM locked?\nA: Yes. Unstake returns XLM to your wallet.\n\nQ: Network fees?\nA: Each transaction costs a small XLM fee on Stellar.\n\nQ: Is XPi the same as Pi Network?\nA: No. XPi is on-chain Stellar crypto you can use right away — not Pi Network.</string>
+    <string name="games_title">Games</string>
+    <string name="games_body">Play partner games and grow your XPi ecosystem.\n\n• Coming soon: mini-games linked to XPi rewards.\n• Stake XLM on the Mining tab to unlock higher participation.\n\nCheck updates in future app versions for download links.</string>
+    <string name="lang_en">English</string>
+    <string name="lang_vi">Tiếng Việt</string>
+    <string name="lang_ja">日本語</string>
+    <string name="lang_ko">한국어</string>
+    <string name="lang_fr">Français</string>
+    <string name="signup_button">Sign up — create Stellar wallet</string>
+    <string name="signup_hint">On StellarTerm: create a key pair, save your private key (S…) offline, then paste that private key below to log in.</string>
+    <string name="tab_wallet">Wallet</string>
+    <string name="create_wallet">Create new Stellar wallet</string>
+    <string name="create_wallet_hint">Generates a key pair on this device. You must save the secret key — it is shown only once.</string>
+    <string name="wallet_created_title">Wallet created — SAVE YOUR SECRET</string>
+    <string name="wallet_created_warning">If you lose the secret key (S…), the funds are gone forever. Copy it offline before continuing.</string>
+    <string name="copy_secret">Copy secret</string>
+    <string name="i_saved_secret">I saved it — continue</string>
+    <string name="receive">Receive</string>
+    <string name="receive_hint">Show this QR or address so others can send you XLM / XPi.</string>
+    <string name="copy_address">Copy address</string>
+    <string name="send">Send</string>
+    <string name="destination_g">Destination (G...)</string>
+    <string name="amount">Amount</string>
+    <string name="asset_code">Asset (XLM or XPi)</string>
+    <string name="memo_optional">Memo (optional)</string>
+    <string name="trustline">Trustline</string>
+    <string name="trustline_hint">Wallets need an XPi trustline before they can receive XPi.</string>
+    <string name="create_xpi_trustline">Create XPi trustline</string>
+</resources>

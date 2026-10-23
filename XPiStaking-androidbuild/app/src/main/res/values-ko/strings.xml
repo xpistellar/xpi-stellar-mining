@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">XPI Mining</string>
+    <string name="login_title">XPI Mining</string>
+    <string name="login_subtitle">Stellar 시크릿 키(S…)로 로그인</string>
+    <string name="secret_key">시크릿 키</string>
+    <string name="login">로그인</string>
+    <string name="language">언어</string>
+    <string name="logout">로그아웃</string>
+    <string name="tab_mining">마이닝</string>
+    <string name="tab_faq">FAQ</string>
+    <string name="tab_games">게임</string>
+    <string name="wallet_assets">지갑 자산</string>
+    <string name="refresh">새로고침</string>
+    <string name="mining_rate">채굴 속도(추정)</string>
+    <string name="mined_session">이번 세션 채굴량</string>
+    <string name="pending_onchain">온체인 대기</string>
+    <string name="stake_to_mine">Stake to mining XPi</string>
+    <string name="amount_xlm">XLM 수량</string>
+    <string name="unstake">언스테이크</string>
+    <string name="claim">클레임</string>
+    <string name="view_stake">스테이크 보기</string>
+    <string name="contract">컨트랙트</string>
+    <string name="min_stake">최소 스테이크: %1$s XLM</string>
+    <string name="unstake_hint">XLM (비우면 전체)</string>
+    <string name="close">닫기</string>
+    <string name="privacy_note">시크릿은 이 기기에만 저장됩니다.</string>
+    <string name="faq_title">FAQ</string>
+    <string name="faq_body">Q: 지갑은 어떻게 만드나요?\nA: 로그인 화면(StellarTerm)에서 Sign up을 탭하세요. 키페어를 생성하고 개인키(S…)를 안전하게 저장한 후, 여기에 붙여넣어 로그인하세요.\n\nQ: XLM은 어떻게 구매하나요?\nA: StellarTerm의 거래소에서 XLM을 구매하거나, 거래소에서 새로 만든 Stellar 공개키(G…)로 XLM을 보내세요.\n\nQ: XPi 트러스트라인을 어떻게 추가하나요?\nA: albedo.link를 열고 → 트러스트라인 추가 → xgoldmining.com의 XPi를 검색 → 확인하여 지갑에서 XPi 보상을 받을 수 있게 합니다.\n\nQ: XPI 마이닝이란 무엇인가요?\nA: XLM을 Soroban 컨트랙트에 잠가서 시간이 지남에 따라 XPi를 획득합니다.\n\nQ: 최소 스테이킹 금액은?\nA: 31.4 XLM입니다.\n\nQ: 카운터는 어떻게 작동하나요?\nA: 실시간 카운터는 UX용 추정치입니다. 실제 보상은 온체인에서 쌓이며, Claim을 눌러 받으세요.\n\nQ: XLM은 잠기나요?\nA: 네. Unstake하면 XLM이 지갑으로 돌아옵니다.\n\nQ: 네트워크 수수료는?\nA: 각 트랜잭션마다 Stellar 네트워크에서 소량의 XLM 수수료가 발생합니다.\n\nQ: XPi는 Pi Network와 같은가요?\nA: 아니요. XPi는 바로 사용할 수 있는 온체인 Stellar 암호화폐이며, Pi Network와는 다릅니다.</string>
+    <string name="games_title">게임</string>
+    <string name="games_body">파트너 게임으로 XPi 생태계를 키우세요.\n\n미니게임과 다운로드 링크가 곧 제공됩니다.</string>
+    <string name="lang_en">English</string>
+    <string name="lang_vi">Tiếng Việt</string>
+    <string name="lang_ja">日本語</string>
+    <string name="lang_ko">한국어</string>
+    <string name="lang_fr">Français</string>
+    <string name="signup_button">가입 — Stellar 지갑 만들기</string>
+    <string name="signup_hint">StellarTerm에서 키 쌍을 만들고 개인키(S…)를 안전하게 저장한 뒤, 아래에 붙여넣어 로그인하세요.</string>
+</resources>

@@ -1,0 +1,8 @@
+{
+  "name": "xpi-staking",
+  "version": "1.0.0",
+  "main": "stake-claim.js",
+  "dependencies": {
+    "@stellar/stellar-sdk": "^14.0.0"
+  }
+}

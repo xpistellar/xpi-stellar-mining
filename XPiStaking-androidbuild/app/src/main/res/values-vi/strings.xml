@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">XPI Mining</string>
+    <string name="login_title">XPI Mining</string>
+    <string name="login_subtitle">Đăng nhập bằng secret key Stellar (S…)</string>
+    <string name="secret_key">Secret key</string>
+    <string name="login">Đăng nhập</string>
+    <string name="language">Ngôn ngữ</string>
+    <string name="logout">Đăng xuất</string>
+    <string name="tab_mining">Mining</string>
+    <string name="tab_faq">FAQ</string>
+    <string name="tab_games">Games</string>
+    <string name="wallet_assets">Tài sản ví</string>
+    <string name="refresh">Làm mới</string>
+    <string name="mining_rate">Tốc độ mine (ước tính)</string>
+    <string name="mined_session">Mine trong phiên</string>
+    <string name="pending_onchain">Pending on-chain</string>
+    <string name="stake_to_mine">Stake để mine XPi</string>
+    <string name="amount_xlm">Số XLM</string>
+    <string name="unstake">Unstake</string>
+    <string name="claim">Claim</string>
+    <string name="view_stake">Xem stake</string>
+    <string name="contract">Hợp đồng</string>
+    <string name="min_stake">Stake tối thiểu: %1$s XLM</string>
+    <string name="unstake_hint">XLM (trống = tất cả)</string>
+    <string name="close">Đóng</string>
+    <string name="privacy_note">Secret chỉ lưu trên thiết bị này.</string>
+    <string name="faq_title">FAQ</string>
+    <string name="faq_body">H: Tạo ví thế nào?\nĐ: Bấm Đăng ký trên màn login (StellarTerm). Tạo key pair, lưu private key (S…), dán vào app để đăng nhập.\n\nH: Mua XLM thế nào?\nĐ: Trên StellarTerm mua XLM, hoặc chuyển XLM từ sàn về public key (G…) vừa tạo.\n\nH: Tạo trustline XPi?\nĐ: Vào albedo.link → Add trustline → tìm XPi (xgoldmining.com) → xác nhận để ví nhận XPi.\n\nH: XPI Mining là gì?\nĐ: Khóa XLM trong hợp đồng Soroban để nhận XPi theo thời gian.\n\nH: Stake tối thiểu?\nĐ: 31.4 XLM.\n\nH: Đồng hồ đếm?\nĐ: Chỉ ước tính trên app. Thưởng thật on-chain; bấm Claim để nhận.\n\nH: XLM có bị khóa?\nĐ: Có. Unstake để lấy lại XLM.\n\nH: XPi có phải Pi Network?\nĐ: Không. XPi là crypto on-chain Stellar, dùng ngay — không phải Pi Network.</string>
+    <string name="games_title">Games</string>
+    <string name="games_body">Chơi game đối tác và phát triển hệ sinh thái XPi.\n\n• Sắp có: mini-game gắn thưởng XPi.\n• Stake XLM ở tab Mining để tham gia nhiều hơn.\n\nCập nhật link tải trong phiên bản sau.</string>
+    <string name="lang_en">English</string>
+    <string name="lang_vi">Tiếng Việt</string>
+    <string name="lang_ja">日本語</string>
+    <string name="lang_ko">한국어</string>
+    <string name="lang_fr">Français</string>
+    <string name="signup_button">Đăng ký — tạo ví Stellar</string>
+    <string name="signup_hint">Trên StellarTerm: tạo cặp khóa, lưu private key (S…) offline, rồi dán private key bên dưới để đăng nhập.</string>
+    <string name="tab_wallet">Ví</string>
+    <string name="create_wallet">Tạo ví Stellar mới</string>
+    <string name="create_wallet_hint">Tạo cặp khóa trên máy. Bạn phải lưu secret — chỉ hiện một lần.</string>
+    <string name="wallet_created_title">Đã tạo ví — LƯU SECRET</string>
+    <string name="wallet_created_warning">Mất secret (S…) là mất tiền. Hãy copy lưu offline trước khi tiếp tục.</string>
+    <string name="copy_secret">Copy secret</string>
+    <string name="i_saved_secret">Đã lưu — tiếp tục</string>
+    <string name="receive">Nhận</string>
+    <string name="receive_hint">Đưa QR hoặc địa chỉ này để người khác gửi XLM / XPi.</string>
+    <string name="copy_address">Copy địa chỉ</string>
+    <string name="send">Gửi</string>
+    <string name="destination_g">Địa chỉ nhận (G...)</string>
+    <string name="amount">Số lượng</string>
+    <string name="asset_code">Asset (XLM hoặc XPi)</string>
+    <string name="memo_optional">Memo (tuỳ chọn)</string>
+    <string name="trustline">Trustline</string>
+    <string name="trustline_hint">Cần trustline XPi trước khi nhận được XPi.</string>
+    <string name="create_xpi_trustline">Tạo trustline XPi</string>
+</resources>

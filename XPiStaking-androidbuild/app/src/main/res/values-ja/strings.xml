@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">XPI Mining</string>
+    <string name="login_title">XPI Mining</string>
+    <string name="login_subtitle">Stellarシークレットキー（S…）でログイン</string>
+    <string name="secret_key">シークレットキー</string>
+    <string name="login">ログイン</string>
+    <string name="language">言語</string>
+    <string name="logout">ログアウト</string>
+    <string name="tab_mining">マイニング</string>
+    <string name="tab_faq">FAQ</string>
+    <string name="tab_games">ゲーム</string>
+    <string name="wallet_assets">ウォレット資産</string>
+    <string name="refresh">更新</string>
+    <string name="mining_rate">マイニング速度（推定）</string>
+    <string name="mined_session">このセッションの採掘量</string>
+    <string name="pending_onchain">オンチェーン未請求</string>
+    <string name="stake_to_mine">Stake to mining XPi</string>
+    <string name="amount_xlm">XLM数量</string>
+    <string name="unstake">アンステーク</string>
+    <string name="claim">クレーム</string>
+    <string name="view_stake">ステーク確認</string>
+    <string name="contract">コントラクト</string>
+    <string name="min_stake">最小ステーク: %1$s XLM</string>
+    <string name="unstake_hint">XLM（空欄＝全額）</string>
+    <string name="close">閉じる</string>
+    <string name="privacy_note">シークレットはこの端末のみに保存されます。</string>
+    <string name="faq_title">FAQ</string>
+    <string name="faq_body">Q: ウォレットの作り方は？\nA: ログイン画面（StellarTerm）で「Sign up」をタップします。キーペアを作成し、秘密鍵（S…）を安全に保存してから、ここに貼り付けてログインしてください。\n\nQ: XLMの買い方は？\nA: StellarTermの取引所でXLMを購入するか、取引所から新しいStellar公開鍵（G…）にXLMを送金してください。\n\nQ: XPiのトラストラインの追加方法は？\nA: albedo.linkを開く → トラストラインを追加 → xgoldmining.comのXPiを検索 → 確認して、ウォレットでXPi報酬を受け取れるようにします。\n\nQ: XPIマイニングとは？\nA: XLMをSorobanコントラクトにロックして、時間とともにXPiを獲得します。\n\nQ: 最小ステーク額は？\nA: 31.4 XLMです。\n\nQ: カウンターの仕組みは？\nA: ライブカウンターはUX用の目安です。実際の報酬はオンチェーンで蓄積されます。Claimで受け取ってください。\n\nQ: XLMはロックされますか？\nA: はい。UnstakeするとXLMがウォレットに戻ります。\n\nQ: ネットワーク手数料は？\nA: 各トランザクションで少量のXLM手数料がかかります（Stellarネットワーク）。\n\nQ: XPiはPi Networkと同じですか？\nA: いいえ。XPiはすぐに使えるオンチェーンのStellar暗号資産です。Pi Networkとは異なります。</string>
+    <string name="games_title">ゲーム</string>
+    <string name="games_body">パートナーゲームでXPiエコシステムを広げましょう。\n\n近日公開のミニゲームとダウンロードリンクにご期待ください。</string>
+    <string name="lang_en">English</string>
+    <string name="lang_vi">Tiếng Việt</string>
+    <string name="lang_ja">日本語</string>
+    <string name="lang_ko">한국어</string>
+    <string name="lang_fr">Français</string>
+    <string name="signup_button">サインアップ — Stellarウォレット作成</string>
+    <string name="signup_hint">StellarTermでキーペアを作成し、秘密鍵（S…）を安全に保存してから、下の欄に貼り付けてログインします。</string>
+</resources>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">XPI Mining</string>
+    <string name="login_title">XPI Mining</string>
+    <string name="login_subtitle">Connexion avec cle secrete Stellar (S…)</string>
+    <string name="secret_key">Cle secrete</string>
+    <string name="login">Connexion</string>
+    <string name="language">Langue</string>
+    <string name="logout">Deconnexion</string>
+    <string name="tab_mining">Mining</string>
+    <string name="tab_faq">FAQ</string>
+    <string name="tab_games">Jeux</string>
+    <string name="wallet_assets">Actifs du portefeuille</string>
+    <string name="refresh">Actualiser</string>
+    <string name="mining_rate">Taux de minage (est.)</string>
+    <string name="mined_session">Mine cette session</string>
+    <string name="pending_onchain">En attente on-chain</string>
+    <string name="stake_to_mine">Stake to mining XPi</string>
+    <string name="amount_xlm">Montant XLM</string>
+    <string name="unstake">Unstake</string>
+    <string name="claim">Claim</string>
+    <string name="view_stake">Voir le stake</string>
+    <string name="contract">Contrat</string>
+    <string name="min_stake">Stake min. : %1$s XLM</string>
+    <string name="unstake_hint">XLM (vide = tout)</string>
+    <string name="close">Fermer</string>
+    <string name="privacy_note">La cle reste uniquement sur cet appareil.</string>
+    <string name="faq_title">FAQ</string>
+    <string name="faq_body">Q: Comment créer un portefeuille ?\nA: Appuyez sur S\'inscrire sur l\'écran de connexion (StellarTerm). Créez une paire de clés, enregistrez la clé privée (S…) en lieu sûr, puis collez-la ici pour vous connecter.\n\nQ: Comment acheter du XLM ?\nA: Sur StellarTerm, utilisez l\'échange pour acheter du XLM, ou envoyez du XLM depuis une bourse vers votre nouvelle clé publique Stellar (G…).\n\nQ: Comment ajouter la ligne de confiance XPi ?\nA: Ouvrez albedo.link → Ajouter une ligne de confiance → recherchez XPi de xgoldmining.com → confirmez afin que votre portefeuille puisse détenir les récompenses XPi.\n\nQ: Qu\'est-ce que le minage XPI ?\nA: Verrouillez du XLM dans un contrat Soroban pour gagner des XPi au fil du temps.\n\nQ: Mise minimale ?\nA: 31,4 XLM.\n\nQ: Comment fonctionne le compteur ?\nA: Le compteur en direct est une estimation pour l\'UX. Les vraies récompenses s\'accumulent on-chain ; utilisez Claim pour les recevoir.\n\nQ: Le XLM est-il verrouillé ?\nA: Oui. Unstake renvoie le XLM dans votre portefeuille.\n\nQ: Frais de réseau ?\nA: Chaque transaction coûte un petit frais en XLM sur Stellar.\n\nQ: XPi est-il la même chose que Pi Network ?\nA: Non. XPi est une crypto Stellar on-chain que vous pouvez utiliser immédiatement — ce n\'est pas Pi Network.</string>
+    <string name="games_title">Jeux</string>
+    <string name="games_body">Jouez aux jeux partenaires pour l ecosysteme XPi.\n\nMini-jeux et liens de telechargement bientot disponibles.</string>
+    <string name="lang_en">English</string>
+    <string name="lang_vi">Tiếng Việt</string>
+    <string name="lang_ja">日本語</string>
+    <string name="lang_ko">한국어</string>
+    <string name="lang_fr">Français</string>
+    <string name="signup_button">Inscription — creer un portefeuille Stellar</string>
+    <string name="signup_hint">Sur StellarTerm: creez une paire de cles, sauvegardez la cle privee (S…), puis collez-la ci-dessous pour vous connecter.</string>
+</resources>
