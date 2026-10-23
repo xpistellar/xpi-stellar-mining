@@ -58,6 +58,6 @@ Because Stellar nodes can run on ordinary hardware and the network already inclu
 ### Quick Links
 
 - [About XPi](about.html)
-- [FAQ – 50 Câu hỏi thường gặp](faq.html)
-- [Hướng dẫn Stake (Manual)](manual.html)
-- [Bài viết & Phân tích](posts.html)
+- [FAQ – 50 Frequently Asked Questions](faq.html)
+- [Staking Manual](manual.html)
+- [Articles & Analysis](posts.html)

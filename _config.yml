@@ -4,6 +4,3 @@ theme: jekyll-theme-cayman
 markdown: kramdown
 plugins:
   - jekyll-seo-tag
-
-# Navigation (Cayman theme will show these if you use proper pages)
-# You can customize further later

@@ -3,178 +3,178 @@ layout: default
 title: FAQ
 ---
 
-# 50 Câu Hỏi Thường Gặp về XPi
+# 50 Frequently Asked Questions about XPi
 
-### Cơ bản về XPi
+### Basics about XPi
 
-**1. XPi là gì?**  
-XPi là token chạy trên mạng Stellar. Tổng cung khoảng 63 triệu, được phân phối rất chậm qua việc stake XLM.
+**1. What is XPi?**  
+XPi is a token running on the Stellar network. Total supply is approximately 63 million, distributed very slowly through XLM staking.
 
-**2. XPi dùng để làm gì?**  
-Chủ yếu để tích lũy dài hạn. Dự án thiết kế để mọi người có thể sở hữu một tài sản khan hiếm mà không cần máy đào đắt tiền.
+**2. What is XPi used for?**  
+Primarily for long-term accumulation. The project is designed so anyone can own a scarce asset without expensive mining equipment.
 
-**3. Ai tạo ra XPi?**  
-Nhóm phát triển tạo trên mạng Stellar và hợp đồng Soroban. Không phải cá nhân ẩn danh.
+**3. Who created XPi?**  
+The development team issued it on the Stellar network using a Soroban smart contract. It is not an anonymous individual project.
 
-**4. XPi có phải tiền pháp định không?**  
-Không. Nó là tài sản số trên Stellar, giá trị do thị trường và người dùng quyết định.
+**4. Is XPi fiat currency?**  
+No. It is a digital asset on Stellar. Its value is determined by the market and users.
 
-**5. XPi khác Bitcoin thế nào?**  
-Bitcoin khó đào với người bình thường. XPi cho phép stake XLM là nhận được, ai cũng tham gia được.
+**5. How is XPi different from Bitcoin?**  
+Bitcoin is hard for ordinary people to mine. XPi allows anyone to earn it by staking XLM.
 
-### Tổng cung và phân phối
+### Supply and Distribution
 
-**6. Tổng cung XPi là bao nhiêu?**  
-Khoảng 63 triệu XPi.
+**6. What is the total supply of XPi?**  
+Approximately 63 million XPi.
 
-**7. Nhóm điều hành giữ bao nhiêu?**  
-Dưới 15% (khoảng 9,45 triệu). Số này được giữ để bảo vệ mạng, hạn chế cá mập gom và pump-dump, tương tự các ví sớm của Bitcoin vẫn nằm yên.
+**7. How much does the operating group hold?**  
+Under 15% (about 9.45 million). This portion is held for network protection and to limit large holders from accumulating and causing pump-and-dump, similar to early Bitcoin addresses that remain dormant.
 
-**8. Mỗi ngày phân phối bao nhiêu XPi?**  
-Chỉ 21 XPi từ ví distributor.
+**8. How many XPi are distributed each day?**  
+Only 21 XPi from the distributor wallet.
 
-**9. Mất bao lâu để phân phối hết phần dành cho cộng đồng?**  
-Phần còn lại khoảng 53,55 triệu. Chia cho 21 XPi/ngày thì mất khoảng 6.986 năm.
+**9. How long does it take to fully distribute the community portion?**  
+The remaining portion is about 53.55 million. At 21 XPi per day it takes approximately 6,986 years.
 
-**10. Tại sao phân phối chậm như vậy?**  
-Để tạo sự khan hiếm lâu dài và giảm áp lực bán lớn ngay từ đầu.
+**10. Why is distribution so slow?**  
+To create long-term scarcity and reduce early selling pressure.
 
-**11. Có thể in thêm XPi không?**  
-Không. Tổng cung cố định, chỉ phân phối theo lịch 21 XPi mỗi ngày.
+**11. Can more XPi be minted?**  
+No. The total supply is fixed and only distributed according to the 21 XPi per day schedule.
 
-**12. 15% nhóm giữ có bán ra không?**  
-Mục đích chính là giữ để bảo vệ mạng, không dùng để tạo thanh khoản ngắn hạn hay pump-dump.
+**12. Will the 15% held by the group be sold?**  
+Its main purpose is network protection, not short-term liquidity or pump-and-dump.
 
-### Staking và tỷ lệ
+### Staking and Rewards
 
-**13. Staking XPi là gì?**  
-Khóa XLM vào hợp đồng Soroban trên Stellar để nhận XPi theo thời gian.
+**13. What is XPi staking?**  
+Locking XLM into a Soroban smart contract on Stellar to receive XPi over time.
 
-**14. Mức stake tối thiểu là bao nhiêu?**  
-31,4 XLM.
+**14. What is the minimum stake?**  
+31.4 XLM.
 
-**15. Tỷ lệ thưởng thế nào?**  
-Gần như tỷ lệ thuận với số XLM stake:  
-- 31,4 XLM → khoảng 0,0000003 XPi/ngày  
-- 314 XLM → khoảng 0,0000031 XPi/ngày  
-- 3140 XLM → khoảng 0,000031 XPi/ngày  
-- 31400 XLM → khoảng 0,00031 XPi/ngày  
+**15. What is the reward rate?**  
+Approximately linear with the amount of XLM staked:  
+- 31.4 XLM → about 0.0000003 XPi/day  
+- 314 XLM → about 0.0000031 XPi/day  
+- 3,140 XLM → about 0.000031 XPi/day  
+- 31,400 XLM → about 0.00031 XPi/day  
 
-**16. Stake nhiều hơn có nhận nhiều hơn không?**  
-Có, tỷ lệ gần như tuyến tính. Càng stake nhiều càng nhận nhiều, nhưng tổng hệ thống vẫn chỉ phát 21 XPi/ngày.
+**16. Does staking more earn more?**  
+Yes, the rate is roughly linear. More stake earns more, but the entire system still only releases 21 XPi per day.
 
-**17. XLM có bị khóa không?**  
-Có, trong lúc stake. Unstake thì XLM được trả lại ví.
+**17. Is the XLM locked?**  
+Yes, while staking. Unstaking returns the XLM to your wallet.
 
-**18. Phần thưởng tính thế nào?**  
-Tính on-chain trong hợp đồng. Counter trên app chỉ là ước tính. Dùng chức năng Claim để nhận thật.
+**18. How are rewards calculated?**  
+On-chain inside the contract. The counter in the app is only an estimate. Use the Claim function to receive the actual rewards.
 
-**19. Có thể unstake bất cứ lúc nào không?**  
-Có. Unstake trả XLM về ví.
+**19. Can I unstake at any time?**  
+Yes. Unstaking returns XLM to your wallet.
 
-**20. Staking có tốn điện không?**  
-Không. Chỉ tốn một ít phí mạng Stellar.
+**20. Does staking consume electricity?**  
+No. It only costs a small Stellar network fee.
 
-### Stellar và kỹ thuật
+### Stellar and Technology
 
-**21. Tại sao chọn Stellar?**  
-Stellar đã có sẵn DEX, Soroban smart contract, phí rất thấp, tốc độ nhanh và có thể chạy nút trên máy tính thông thường.
+**21. Why was Stellar chosen?**  
+Stellar already has a built-in DEX, Soroban smart contracts, very low fees, fast speed, and nodes can run on ordinary computers.
 
-**22. Soroban là gì?**  
-Nền tảng smart contract của Stellar. Hợp đồng staking XPi chạy trên Soroban.
+**22. What is Soroban?**  
+Stellar’s smart contract platform. The XPi staking contract runs on Soroban.
 
-**23. DEX của Stellar dùng được với XPi không?**  
-Có. Sau khi thêm trustline, có thể giao dịch XPi trực tiếp trên DEX Stellar.
+**23. Can I use Stellar’s DEX with XPi?**  
+Yes. After adding the trustline, you can trade XPi directly on the Stellar DEX.
 
-**24. Memo là gì và XPi có hỗ trợ không?**  
-Memo là ghi chú gắn vào giao dịch. Stellar và XPi hỗ trợ đầy đủ.
+**24. What is a memo and does XPi support it?**  
+A memo is a note attached to a transaction. Stellar and XPi fully support it.
 
-**25. Phí giao dịch bao nhiêu?**  
-Rất thấp, thường chỉ vài phần trăm của 1 XLM.
+**25. What are the transaction fees?**  
+Very low — usually a fraction of 1 XLM.
 
-**26. Giao dịch mất bao lâu?**  
-Vài giây.
+**26. How long do transactions take?**  
+A few seconds.
 
-**27. Trustline là gì?**  
-Là bước cho phép ví nhận XPi. Phải thêm trustline trước khi giữ được XPi.
+**27. What is a trustline?**  
+Permission that allows your wallet to hold XPi. You must add a trustline before you can receive XPi.
 
-**28. Làm sao thêm trustline?**  
-Dùng ví như Albedo → Add trustline → tìm XPi từ nguồn chính thức.
+**28. How do I add a trustline?**  
+Use a wallet such as Albedo → Add trustline → search for the official XPi issuer.
 
-**29. Nút Stellar có khó chạy không?**  
-Không. Có thể chạy trên máy Ubuntu cấu hình trung bình.
+**29. Is it difficult to run a Stellar node?**  
+No. It can run on a mid-range Ubuntu machine.
 
-**30. Mạng Stellar có thể bị tắt dễ dàng không?**  
-Khó. Nhiều người có thể chạy nút độc lập, đồng thuận phân tán.
+**30. Can the Stellar network be easily shut down?**  
+Difficult. Many independent nodes participate in distributed consensus.
 
-### Bảo mật và quyền sở hữu
+### Security and Ownership
 
-**31. Private key nằm ở đâu?**  
-Người dùng tự giữ bằng ví Stellar. Dự án không giữ key của bạn.
+**31. Where is the private key stored?**  
+Users hold it themselves in a Stellar wallet. The project never holds your keys.
 
-**32. Mất private key thì sao?**  
-Mất coin, giống mọi blockchain khác. Nên backup cẩn thận.
+**32. What happens if I lose my private key?**  
+You lose the coins, the same as any other blockchain. Always back up carefully.
 
-**33. Số dư XPi có nằm trên server của dự án không?**  
-Không. Nằm on-chain trên Stellar, bạn kiểm soát bằng private key.
+**33. Are XPi balances stored on the project’s servers?**  
+No. They are on-chain on Stellar and controlled by your private key.
 
-**34. Có cần KYC không?**  
-Không cần để stake và nhận XPi.
+**34. Is KYC required?**  
+No KYC is required to stake and receive XPi.
 
-**35. Hợp đồng có kiểm tra được không?**  
-Có. Mọi người có thể xem hợp đồng Soroban và giao dịch trên explorer Stellar.
+**35. Can the contract be verified?**  
+Yes. Anyone can inspect the Soroban contract and transactions on Stellar explorers.
 
-**36. XPi có bị hack được không?**  
-Rủi ro chính nằm ở cách bạn giữ ví và hợp đồng. Mạng Stellar đã hoạt động lâu năm.
+**36. Can XPi be hacked?**  
+The main risks are how you store your wallet and the contract itself. The Stellar network has been operating for many years.
 
-### Tính nghiêm túc và dài hạn của dự án
+### Project Seriousness and Long-term Vision
 
-**37. Tại sao nói dự án nghiêm túc?**  
-Vì phân phối gần 7.000 năm, nhóm giữ 15% để bảo vệ mạng thay vì bán ra, và mọi thứ chạy on-chain minh bạch.
+**37. Why is the project considered serious?**  
+Because of the nearly 7,000-year distribution schedule, the 15% held for network protection rather than selling, and full on-chain transparency.
 
-**38. Dự án có định pump-dump không?**  
-Không. Không list CEX và phân phối cực chậm để giảm việc đó.
+**38. Does the project intend to pump-and-dump?**  
+No. There is no CEX listing priority and distribution is extremely slow to reduce that risk.
 
-**39. Cloud mining có thuộc nhà phát triển không?**  
-Không. Đó là hoạt động của người dùng mua XPi sớm, không phải của nhóm phát triển.
+**39. Are cloud-mining offers run by the developers?**  
+No. Those are arrangements between users, not the development team.
 
-**40. Referral hoạt động thế nào?**  
-Chỉ là tùy chọn giữa người dùng với nhau, không phải cơ chế cốt lõi của giao thức.
+**40. How does the referral system work?**  
+It is only an optional user-to-user feature, not a core protocol mechanism.
 
-### So sánh và định vị
+### Comparison and Positioning
 
-**41. XPi khác Pi Network thế nào?**  
-XPi chạy on-chain từ đầu, người dùng giữ private key thật, không phụ thuộc server tập trung.
+**41. How is XPi different from Pi Network?**  
+XPi has been on-chain from day one. Users hold real private keys and do not depend on centralized servers.
 
-**42. XPi có phải “digital gold” không?**  
-Đó là mục tiêu dài hạn: vừa khan hiếm vừa dễ tiếp cận cho mọi người.
+**42. Is XPi “digital gold”?**  
+That is the long-term goal: scarce enough and accessible enough for ordinary people.
 
-**43. Có thể vừa hiếm vừa dễ sở hữu được không?**  
-Có. XPi vừa phân phối cực chậm (hiếm) vừa cho phép stake từ 31,4 XLM (dễ sở hữu).
+**43. Can something be both scarce and easy to own?**  
+Yes. XPi is distributed extremely slowly (scarce) while allowing staking from just 31.4 XLM (accessible).
 
-**44. Dự án có hứa lợi nhuận không?**  
-Không. Chỉ định nghĩa quy tắc phát hành và staking. Giá do thị trường quyết định.
+**44. Does the project promise profits?**  
+No. It only defines issuance and staking rules. Price is determined by the market.
 
-**45. Rủi ro lớn nhất là gì?**  
-Rủi ro thị trường và rủi ro tự giữ private key. Chỉ dùng số tiền bạn chấp nhận được biến động.
+**45. What is the biggest risk?**  
+Market risk and self-custody risk. Only use amounts you can afford to see fluctuate.
 
-### Bắt đầu nhanh
+### Getting Started
 
-**46. Người mới bắt đầu nên làm gì?**  
-Tạo ví Stellar → thêm trustline XPi chính thức → có một ít XLM → stake từ 31,4 XLM.
+**46. What should a new user do?**  
+Create a Stellar wallet → add the official XPi trustline → obtain some XLM → stake from 31.4 XLM.
 
-**47. Làm sao xác nhận đúng token XPi?**  
-Kiểm tra issuer là `GDOFJE…LZFUEF` và domain xgoldmining.com trên Stellar Expert.
+**47. How do I confirm I have the real XPi?**  
+Check that the issuer is `GDOFJE…LZFUEF` and the domain is xgoldmining.com on Stellar Expert.
 
-**48. Có cần app riêng không?**  
-Có thể dùng app, CLI Node.js hoặc ví Stellar thông thường.
+**48. Do I need a dedicated app?**  
+You can use the official app, the Node.js CLI tool, or any regular Stellar wallet.
 
-**49. XPi có thể chia nhỏ đến mức nào?**  
-Stellar hỗ trợ chia rất nhỏ, thuận tiện cho việc tích lũy dần.
+**49. How divisible is XPi?**  
+Stellar supports very high divisibility, which is convenient for gradual accumulation.
 
-**50. Tóm lại, XPi giải quyết vấn đề gì?**  
-Tạo ra một tài sản đủ khan hiếm để có tiềm năng lưu trữ giá trị dài hạn, đồng thời đủ đơn giản để người bình thường có thể sở hữu trực tiếp bằng cách stake XLM trên mạng công khai chi phí thấp.
+**50. In short, what problem is XPi trying to solve?**  
+Creating an asset scarce enough to have long-term store-of-value potential, yet simple enough for ordinary people to own directly by staking XLM on a mature, low-cost public network.
 
 ---
 
-[← Về trang chủ](index.html)
+[← Back to Home](index.html)

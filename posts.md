@@ -3,7 +3,7 @@ layout: default
 title: Posts
 ---
 
-# Bài viết & Phân tích
+# Articles & Analysis
 
 <ul>
   {% for post in site.posts %}
@@ -16,4 +16,4 @@ title: Posts
 
 ---
 
-[← Về trang chủ](index.html)
+[← Back to Home](index.html)

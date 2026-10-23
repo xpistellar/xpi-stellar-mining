@@ -3,27 +3,27 @@ layout: default
 title: Manual
 ---
 
-# Hướng dẫn Stake XPi
+# XPi Staking Manual
 
-Stake XLM trên mạng Stellar để nhận XPi thông qua hợp đồng Soroban.
+Stake XLM on the Stellar network to earn XPi through a Soroban smart contract.
 
 * **Contract ID**: `CDQ4OO3FU3CBNVWZX2GDU4BQQNQFAHBITTXULTVIECY4OMJGTM33M73H`
-* **Mức stake tối thiểu**: 31,4 XLM
-* **Thưởng ước tính**: ~0,0000003 XPi/ngày cho mỗi 31,4 XLM (tỷ lệ gần như tuyến tính)
-* Người dùng tự giữ private key
+* **Minimum stake**: 31.4 XLM
+* **Approximate reward**: ~0.0000003 XPi per day per 31.4 XLM (scales roughly linearly)
+* Users keep full control of their private keys
 
 ---
 
 ## 1. Node.js CLI Tool (Ubuntu)
 
-Công cụ dòng lệnh đơn giản để stake, unstake, claim thưởng và kiểm tra số dư.
+A simple command-line tool to stake, unstake, claim rewards, and check your balance.
 
-### Yêu cầu
+### Requirements
 
-* Ubuntu 20.04 trở lên
-* Kết nối Internet
+* Ubuntu 20.04 or newer
+* Internet connection
 
-### Bước 1: Cài Node.js
+### Step 1: Install Node.js
 
 ```bash
 sudo apt update
@@ -34,70 +34,70 @@ node -v
 npm -v
 ```
 
-### Bước 2: Tạo thư mục dự án
+### Step 2: Create project folder
 
 ```bash
 mkdir ~/xpi-staking
 cd ~/xpi-staking
 ```
 
-Tải hoặc tạo file `stake-claim.js` và dán script Node.js staking vào đó.
+Download or create the file `stake-claim.js` and paste the Node.js staking script into it.
 
-### Bước 3: Cài dependencies
+### Step 3: Install dependencies
 
 ```bash
 npm init -y
 npm install @stellar/stellar-sdk
 ```
 
-### Bước 4: Chạy công cụ
+### Step 4: Run the tool
 
 ```bash
 node stake-claim.js
 ```
 
-Bạn sẽ được hỏi secret key Stellar (bắt đầu bằng `S...`).
+You will be asked for your Stellar secret key (starts with `S...`).
 
 **Menu:**
 
-1. Stake XLM (tối thiểu 31,4)
-2. Unstake XLM (Enter hoặc 0 để unstake hết)
+1. Stake XLM (minimum 31.4)
+2. Unstake XLM (press Enter or type 0 to unstake all)
 3. Claim XPi rewards
-4. Xem stake hiện tại
-5. Xem thưởng đang chờ
-6. Thoát
+4. View current stake
+5. View pending rewards
+6. Exit
 
-### Lưu ý quan trọng
+### Important
 
-* **Không bao giờ chia sẻ secret key**.
-* Đảm bảo tài khoản có đủ XLM cho stake + phí mạng.
-* Có thể unstake bất cứ lúc nào.
-
----
-
-## 2. Android App – Cài trực tiếp (APK)
-
-### Yêu cầu
-
-* Android 8.0 trở lên
-* Cho phép cài từ nguồn không xác định
-
-### Cài đặt
-
-1. Tải file APK từ nguồn chính thức của dự án
-2. Mở file APK và cho phép cài đặt
-3. Mở app → kết nối ví Stellar (hoặc nhập secret key nếu app hỗ trợ)
-4. Thêm trustline XPi nếu chưa có
-5. Stake XLM và claim thưởng theo hướng dẫn trong app
+* **Never share your secret key**.
+* Make sure your account has enough XLM for the stake + network fees.
+* You can unstake at any time.
 
 ---
 
-## 3. Sử dụng ví Stellar thông thường
+## 2. Android App – Direct Install (APK)
 
-Bạn cũng có thể tương tác với hợp đồng thông qua các ví hỗ trợ Soroban (ví dụ Freighter, Lobstr, xBull…) khi đã hiểu rõ cách gọi contract.
+### Requirements
 
-**Luôn kiểm tra Contract ID và Issuer trước khi thực hiện bất kỳ giao dịch nào.**
+* Android 8.0 or higher
+* Allow installation from unknown sources
+
+### Installation
+
+1. Download the APK from the official project source
+2. Open the APK file and allow installation
+3. Open the app → connect your Stellar wallet (or enter secret key if supported)
+4. Add the XPi trustline if you have not already
+5. Stake XLM and claim rewards following the in-app instructions
 
 ---
 
-[← Về trang chủ](index.html)
+## 3. Using a Regular Stellar Wallet
+
+You can also interact with the contract through wallets that support Soroban (e.g. Freighter, Lobstr, xBull…) once you understand how to call the contract.
+
+**Always verify the Contract ID and Issuer before performing any transaction.**
+
+---
+
+[← Back to Home](index.html)

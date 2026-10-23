@@ -375,5 +375,142 @@ Transfer the APK to your phone and install it, or connect the phone via USB and 
 
 Use at your own risk. Only stake what you can afford. Always verify the contract ID on [Stellar Expert](https://stellar.expert) before interacting.
 
-**Contract**: `CDQ4OO3FU3CBNVWZX2GDU4BQQNQFAHBITTXULTVIECY4OMJGTM33M73H`
+# XPi Lock Staking - Portable Windows Guide
 
+## 1. Prepare the Portable Folder (only need to do once)
+
+### Step 1: Download full Node.js
+Download the official Windows zip (not the installer):
+
+👉 https://nodejs.org/dist/v22.23.4/node-v22.23.4-win-x64.zip
+
+### Step 2: Extract and rename
+1. Extract the zip file.
+2. You will get a folder named `node-v22.23.4-win-x64`.
+3. Rename that folder to `XPi-Staking-Portable`.
+
+### Step 3: Copy required files
+Copy these 2 files into the `XPi-Staking-Portable` folder:
+
+- `stake-claim.js` (the staking script)
+- `package.json` (with the content below)
+
+**package.json content:**
+
+```json
+{
+  "name": "xpi-staking",
+  "version": "1.0.0",
+  "main": "stake-claim.js",
+  "dependencies": {
+    "@stellar/stellar-sdk": "^14.0.0"
+  }
+}
+```
+
+### Step 4: Install dependencies
+1. Open the `XPi-Staking-Portable` folder.
+2. Click on the **Address bar** at the top.
+3. Type `cmd` and press **Enter**.
+
+A Command Prompt window will open directly in this folder.
+
+4. Run the following command:
+
+```
+npm install
+```
+
+Wait until you see the message `added ... packages`. This only needs to be done **once**.
+
+### Step 5: Create run.bat (optional but recommended)
+Create a new file named `run.bat` in the same folder with this content:
+
+```bat
+@echo off
+cd /d "%~dp0"
+title XPi Lock Staking - Portable
+echo.
+echo ========================================
+echo    XPi Lock Staking (Portable)
+echo    Min stake: 31.4 XLM
+echo ========================================
+echo.
+node.exe stake-claim.js
+echo.
+pause
+```
+
+---
+
+## 2. How to Use
+
+### Method 1 (Recommended)
+Double-click the file `run.bat`
+
+### Method 2
+1. Open the folder.
+2. Click the Address bar → type `cmd` → press Enter.
+3. Run:
+
+```
+node stake-claim.js
+```
+
+---
+
+## Notes
+- You only need to run `npm install` **one time**.
+- After that, you can copy the entire folder to any other Windows computer and run it without installing Node.js.
+- Your private key is only used locally on your machine.
+
+# XPi Lock Staking - Web Version Guide
+
+## Overview
+This is a browser-based version of the XPi Lock Staking tool.  
+All operations (Stake / Unstake / Claim / View) run entirely in your browser.  
+Your private key **never leaves your computer**.
+
+## Requirements
+- Any modern browser (Chrome, Edge, Firefox, Safari…)
+- Internet connection (to call Stellar Horizon & Soroban RPC)
+- A web server or local server to host the files (PHP, Apache, Nginx, or even simple static hosting)
+
+## How to Deploy
+
+1. Download and extract the `xpi-staking-web` folder.
+2. Upload the **entire folder** to your web hosting (or place it in your local web server directory).
+3. Open the site in your browser:
+   - Example: `https://yourdomain.com/xpi-staking-web/`
+   - Or locally: `http://localhost/xpi-staking-web/`
+
+## How to Use
+
+1. Open the page in your browser.
+2. Paste your Stellar **Private Key** (starts with `S...`).
+3. Choose an action:
+   - **Stake XLM** → enter amount (minimum 31.4 XLM)
+   - **Unstake** → enter amount or leave empty/0 to unstake all
+   - **Claim** → claim pending rewards
+   - **View get_stake** → check current stake
+   - **View pending** → check estimated rewards
+4. Confirm the action and wait for the result in the log panel.
+
+## Folder Structure
+```
+xpi-staking-web/
+├── index.php                  ← Main page
+├── lib/
+│   └── stellar-sdk.min.js     ← Full Stellar SDK (local, no CDN)
+├── css/
+│   └── style.css
+├── js/
+│   └── app.js                 ← All staking logic
+└── README.md
+```
+
+## Important Notes
+- No data is stored on the server.
+- Private key is only used inside your browser.
+- You still need internet access to communicate with the Stellar network.
+- For maximum security, only use this tool on a trusted personal device.

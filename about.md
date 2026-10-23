@@ -5,42 +5,43 @@ title: About
 
 # About XPi
 
-**XPi** là một tài sản số khan hiếm được phát hành trên mạng Stellar, thiết kế để mọi người có thể sở hữu một “vàng kỹ thuật số” mà không cần máy đào đắt tiền.
+**XPi** is a scarce digital asset issued on the Stellar network, designed so that anyone can own “digital gold” without expensive mining hardware.
 
-## Tóm tắt dự án
+## Project Summary
 
-- **Tổng cung cố định**: 63.000.000 XPi  
-- **Nhóm điều hành giữ**: dưới 15% (mục đích bảo vệ mạng, tương tự các ví sớm của Bitcoin)  
-- **Phân phối cộng đồng**: 21 XPi mỗi ngày qua hợp đồng Soroban  
-- **Thời gian phân phối hết phần cộng đồng**: khoảng 7.000 năm  
-- **Cách nhận XPi**: Stake XLM (tối thiểu 31,4 XLM)  
-- **Quyền sở hữu**: Người dùng tự giữ private key, không KYC  
+- **Fixed total supply**: 63,000,000 XPi  
+- **Operating group allocation**: under 15% (for network protection, similar to early Bitcoin dormant addresses)  
+- **Community distribution**: 21 XPi per day via Soroban smart contract  
+- **Time to fully distribute community portion**: approximately 7,000 years  
+- **How to obtain XPi**: Stake XLM (minimum 31.4 XLM)  
+- **Ownership**: Users hold their own private keys — no KYC required  
 
-## Tại sao chọn Stellar?
+## Why Stellar?
 
-Stellar đã có sẵn:
-- DEX tích hợp
-- Smart contract Soroban
-- Phí cực thấp
-- Tốc độ xác nhận vài giây
-- Có thể chạy node trên máy tính thông thường
+Stellar already provides:
 
-XPi kế thừa toàn bộ hạ tầng này thay vì xây dựng từ đầu.
+- Built-in DEX
+- Soroban smart contracts
+- Extremely low fees
+- Confirmation in a few seconds
+- Ability to run nodes on ordinary computers
 
-## Mục tiêu dài hạn
+XPi inherits this mature infrastructure instead of building from scratch.
 
-XPi không hướng đến giao dịch ngắn hạn trên sàn tập trung.  
-Mục tiêu là tạo ra một tài sản **đủ khan hiếm** để lưu trữ giá trị lâu dài và **đủ dễ tiếp cận** để người bình thường có thể sở hữu trực tiếp.
+## Long-term Goal
 
-## Thông tin kỹ thuật
+XPi is not designed for short-term trading on centralized exchanges.  
+The goal is to create an asset that is **scarce enough** to serve as a long-term store of value and **accessible enough** for ordinary people to own directly.
 
-| Mục | Giá trị |
-|-----|---------|
+## Technical Details
+
+| Item | Value |
+|------|-------|
 | Contract | `CDQ4OO3FU3CBNVWZX2GDU4BQQNQFAHBITTXULTVIECY4OMJGTM33M73H` |
 | Issuer | `GDOFJEZ3FUWAC2EVHPRMJPSWPOD3KJF7FTXFZIERFFPB2VMTRQLZFUEF` |
 | Domain | xgoldmining.com |
-| Mức stake tối thiểu | 31,4 XLM |
+| Minimum stake | 31.4 XLM |
 
 ---
 
-[← Về trang chủ](index.html)
+[← Back to Home](index.html)
