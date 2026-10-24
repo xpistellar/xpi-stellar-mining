@@ -83,6 +83,10 @@ class StakingViewModel : ViewModel() {
     private val _balances = MutableStateFlow<Map<String, String>>(emptyMap())
     val balances: StateFlow<Map<String, String>> = _balances
 
+    /** asset code -> issuer account (null for XLM) */
+    private val _assetIssuers = MutableStateFlow<Map<String, String?>>(emptyMap())
+    val assetIssuers: StateFlow<Map<String, String?>> = _assetIssuers
+
     private val _pending = MutableStateFlow("—")
     val pending: StateFlow<String> = _pending
 
@@ -150,27 +154,45 @@ class StakingViewModel : ViewModel() {
                 val horizon = HorizonServer(HORIZON_URL)
                 val account = horizon.accounts().account(pk)
                 val result = linkedMapOf<String, String>()
+                val issuers = linkedMapOf<String, String?>()
+                // Always include native if present
+                account.balances.firstOrNull { it.assetType == "native" }?.let {
+                    result["XLM"] = it.balance
+                    issuers["XLM"] = null
+                }
                 for (tracked in AssetRegistry.assets) {
-                    val bal = if (tracked.issuer == null) {
-                        account.balances.firstOrNull { it.assetType == "native" }?.balance
-                    } else {
-                        account.balances.firstOrNull {
-                            it.assetType != "native" &&
-                                it.assetCode == tracked.code &&
-                                it.assetIssuer == tracked.issuer
-                        }?.balance
-                    } ?: "0"
-                    val formatted = try {
-                        BigDecimal(bal).setScale(6, RoundingMode.DOWN)
-                            .stripTrailingZeros().toPlainString()
-                    } catch (_: Exception) {
-                        bal
-                    }
-                    if (tracked.code == "XLM" || formatted != "0") {
-                        result[tracked.code] = formatted
+                    if (tracked.issuer == null) continue
+                    val bal = account.balances.firstOrNull {
+                        it.assetType != "native" &&
+                            it.assetCode == tracked.code &&
+                            it.assetIssuer == tracked.issuer
+                    }?.balance
+                    if (bal != null) {
+                        result[tracked.code] = bal
+                        issuers[tracked.code] = tracked.issuer
                     }
                 }
-                _balances.value = result
+                // Any other balances on account
+                for (b in account.balances) {
+                    if (b.assetType == "native") continue
+                    val code = b.assetCode ?: continue
+                    if (code !in result) {
+                        result[code] = b.balance
+                        issuers[code] = b.assetIssuer
+                    }
+                }
+                // Format numbers
+                val formatted = linkedMapOf<String, String>()
+                for ((k, v) in result) {
+                    formatted[k] = try {
+                        java.math.BigDecimal(v).setScale(6, java.math.RoundingMode.DOWN)
+                            .stripTrailingZeros().toPlainString()
+                    } catch (_: Exception) {
+                        v
+                    }
+                }
+                _balances.value = formatted
+                _assetIssuers.value = issuers
                 horizon.close()
             } catch (e: Exception) {
                 _balances.value = mapOf("Error" to (e.message ?: "?"))
@@ -341,12 +363,8 @@ class StakingViewModel : ViewModel() {
             try {
                 _uiState.value = UiState.Loading("Creating wallet...")
                 val kp = KeyPair.random()
-                val secret = try {
-                    String(kp.secretSeed)
-                } catch (_: Exception) {
-                    // some SDK builds expose secretSeed differently
-                    kp.secretSeed?.let { String(it) } ?: throw Exception("Cannot read secret seed")
-                }
+                val secret = kp.getSecretSeed()?.concatToString()
+                    ?: throw Exception("Cannot read secret seed")
                 keyPair = kp
                 publicKey = kp.getAccountId()
                 _createdSecret.value = secret
@@ -416,13 +434,20 @@ class StakingViewModel : ViewModel() {
                 val server = HorizonServer(HORIZON_URL)
                 val account = server.loadAccount(key.getAccountId())
 
-                val asset = if (assetCode == "XLM") {
+                val code = assetCode.trim()
+                val asset = if (code.equals("XLM", ignoreCase = true)) {
                     AssetTypeNative
                 } else {
-                    val tracked = AssetRegistry.assets.firstOrNull { it.code == assetCode && it.issuer != null }
-                        ?: throw Exception("Unknown asset $assetCode")
-                    Asset.createNonNativeAsset(tracked.code, tracked.issuer!!)
+                    val issuer = _assetIssuers.value[code]
+                        ?: _assetIssuers.value.entries.firstOrNull { it.key.equals(code, true) }?.value
+                        ?: AssetRegistry.assets.firstOrNull { it.code.equals(code, true) }?.issuer
+                    if (issuer.isNullOrBlank()) {
+                        throw Exception("Unknown issuer for $code — refresh balances first")
+                    }
+                    Asset.createNonNativeAsset(code, issuer)
                 }
+
+                
 
                 val builder = TransactionBuilder(account, NETWORK)
                     .setBaseFee(100_000)
@@ -483,6 +508,7 @@ class StakingViewModel : ViewModel() {
         keyPair = null
         publicKey = null
         _balances.value = emptyMap()
+        _assetIssuers.value = emptyMap()
         _pending.value = "—"
         _stakedXlm.value = 0.0
         _displayMined.value = 0.0
@@ -493,6 +519,7 @@ class StakingViewModel : ViewModel() {
         object Idle : UiState()
         data class Loading(val message: String) : UiState()
         data class LoggedIn(val publicKey: String) : UiState()
+        data class WalletCreated(val publicKey: String, val secretKey: String) : UiState()
         data class Success(val message: String) : UiState()
         data class Error(val message: String) : UiState()
         data class StakeInfo(val info: String) : UiState()

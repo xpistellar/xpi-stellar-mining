@@ -1,4 +1,10 @@
 package com.xpi.staking.ui
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExperimentalMaterial3Api
+import android.net.Uri
+import android.content.Intent
 
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -56,7 +62,7 @@ fun HomeScreen(
     onLogout: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var tab by remember { mutableIntStateOf(0) }
+    var tab by remember { mutableIntStateOf(1) }
     val tabs = listOf(
         stringResource(R.string.tab_mining),
         stringResource(R.string.tab_wallet),
@@ -122,6 +128,7 @@ private fun SimpleTextTab(title: String, body: String) {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun WalletTab(viewModel: StakingViewModel, publicKey: String) {
     val context = LocalContext.current
@@ -130,8 +137,19 @@ private fun WalletTab(viewModel: StakingViewModel, publicKey: String) {
     val uiState by viewModel.uiState.collectAsState()
     var dest by remember { mutableStateOf("") }
     var amount by remember { mutableStateOf("") }
-    var asset by remember { mutableStateOf("XLM") }
     var memo by remember { mutableStateOf("") }
+    var assetExpanded by remember { mutableStateOf(false) }
+    val assetOptions = remember(balances) {
+        balances.keys.filter { it != "Error" && it.isNotBlank() }
+            .sortedWith(compareBy({ it != "XLM" }, { it }))
+            .ifEmpty { listOf("XLM") }
+    }
+    var selectedAsset by remember { mutableStateOf("XLM") }
+    LaunchedEffect(assetOptions) {
+        if (selectedAsset !in assetOptions) {
+            selectedAsset = assetOptions.firstOrNull() ?: "XLM"
+        }
+    }
     val loading = uiState is StakingViewModel.UiState.Loading
     val message: String? = when (val s = uiState) {
         is StakingViewModel.UiState.Success -> s.message
@@ -139,10 +157,9 @@ private fun WalletTab(viewModel: StakingViewModel, publicKey: String) {
         is StakingViewModel.UiState.Loading -> s.message
         else -> null
     }
+    val buyXlmUrl = "https://stellarterm.com/buy-crypto?crypto=xlm&network=stellar"
 
-    LaunchedEffect(publicKey) {
-        viewModel.generateReceiveQr()
-    }
+    LaunchedEffect(publicKey) { viewModel.generateReceiveQr() }
 
     Column(
         Modifier
@@ -151,34 +168,78 @@ private fun WalletTab(viewModel: StakingViewModel, publicKey: String) {
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        Card(Modifier.fillMaxWidth()) {
+        Card(modifier = Modifier.fillMaxWidth()) {
+            Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text("1. Fund XLM", fontWeight = FontWeight.Bold)
+                Text(
+                    "New wallets start with 0 XLM. Buy XLM, then send it to your address below.",
+                    fontSize = 13.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Button(
+                    onClick = {
+                        context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(buyXlmUrl)))
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                ) { Text("Buy / fund XLM") }
+                Text(publicKey, fontSize = 10.sp, fontFamily = FontFamily.Monospace)
+                OutlinedButton(onClick = {
+                    val cm = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                    cm.setPrimaryClip(ClipData.newPlainText("stellar_public", publicKey))
+                }) { Text(stringResource(R.string.copy_address)) }
+            }
+        }
+
+        Card(modifier = Modifier.fillMaxWidth()) {
+            Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text("2. Create XPi trustline", fontWeight = FontWeight.Bold)
+                Text(stringResource(R.string.trustline_hint), fontSize = 12.sp)
+                Button(
+                    onClick = { viewModel.ensureXpiTrustline() },
+                    enabled = !loading,
+                    modifier = Modifier.fillMaxWidth()
+                ) { Text(stringResource(R.string.create_xpi_trustline)) }
+                OutlinedButton(
+                    onClick = { viewModel.refreshAll() },
+                    enabled = !loading,
+                    modifier = Modifier.fillMaxWidth()
+                ) { Text(stringResource(R.string.refresh)) }
+                balances.forEach { entry ->
+                        val code = entry.key
+                        val bal = entry.value
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                        Text(code, fontWeight = FontWeight.Medium)
+                        Text(bal)
+                    }
+                }
+            }
+        }
+
+        Card(modifier = Modifier.fillMaxWidth()) {
             Column(
                 Modifier.padding(12.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 Text(stringResource(R.string.receive), fontWeight = FontWeight.Bold)
-                Text(stringResource(R.string.receive_hint), fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 if (qr != null) {
                     Image(
                         bitmap = qr!!.asImageBitmap(),
                         contentDescription = "Receive QR",
-                        modifier = Modifier.size(200.dp)
+                        modifier = Modifier.size(180.dp)
                     )
-                }
-                Text(publicKey, fontSize = 10.sp, fontFamily = FontFamily.Monospace)
-                OutlinedButton(onClick = {
-                    val cm = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                    cm.setPrimaryClip(ClipData.newPlainText("stellar_public", publicKey))
-                }) {
-                    Text(stringResource(R.string.copy_address))
                 }
             }
         }
 
-        Card(Modifier.fillMaxWidth()) {
+        Card(modifier = Modifier.fillMaxWidth()) {
             Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(stringResource(R.string.send), fontWeight = FontWeight.Bold)
+                Text(
+                    "Select an asset from your wallet balances (issuer is applied automatically).",
+                    fontSize = 12.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
                 OutlinedTextField(
                     value = dest,
                     onValueChange = { dest = it },
@@ -193,13 +254,34 @@ private fun WalletTab(viewModel: StakingViewModel, publicKey: String) {
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true
                 )
-                OutlinedTextField(
-                    value = asset,
-                    onValueChange = { asset = it },
-                    label = { Text(stringResource(R.string.asset_code)) },
-                    modifier = Modifier.fillMaxWidth(),
-                    singleLine = true
-                )
+                ExposedDropdownMenuBox(
+                    expanded = assetExpanded,
+                    onExpandedChange = { assetExpanded = it }
+                ) {
+                    OutlinedTextField(
+                        value = selectedAsset,
+                        onValueChange = {},
+                        readOnly = true,
+                        label = { Text("Asset (from your wallet)") },
+                        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(assetExpanded) },
+                        modifier = Modifier.menuAnchor().fillMaxWidth()
+                    )
+                    ExposedDropdownMenu(
+                        expanded = assetExpanded,
+                        onDismissRequest = { assetExpanded = false }
+                    ) {
+                        assetOptions.forEach { code ->
+                            val bal = balances[code] ?: ""
+                            DropdownMenuItem(
+                                text = { Text("$code  ($bal)") },
+                                onClick = {
+                                    selectedAsset = code
+                                    assetExpanded = false
+                                }
+                            )
+                        }
+                    }
+                }
                 OutlinedTextField(
                     value = memo,
                     onValueChange = { memo = it },
@@ -208,44 +290,15 @@ private fun WalletTab(viewModel: StakingViewModel, publicKey: String) {
                     singleLine = true
                 )
                 Button(
-                    onClick = { viewModel.sendPayment(dest, amount, asset.trim().ifEmpty { "XLM" }, memo) },
-                    enabled = !loading,
+                    onClick = { viewModel.sendPayment(dest, amount, selectedAsset, memo) },
+                    enabled = !loading && selectedAsset.isNotBlank(),
                     modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(stringResource(R.string.send))
-                }
-            }
-        }
-
-        Card(Modifier.fillMaxWidth()) {
-            Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text(stringResource(R.string.trustline), fontWeight = FontWeight.Bold)
-                Text(stringResource(R.string.trustline_hint), fontSize = 12.sp)
-                Button(
-                    onClick = { viewModel.ensureXpiTrustline() },
-                    enabled = !loading,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(stringResource(R.string.create_xpi_trustline))
-                }
-                OutlinedButton(
-                    onClick = { viewModel.refreshAll() },
-                    enabled = !loading,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(stringResource(R.string.refresh))
-                }
-                balances.forEach { (code, bal) ->
-                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                        Text(code, fontWeight = FontWeight.Medium)
-                        Text(bal)
-                    }
-                }
+                ) { Text("Send $selectedAsset") }
             }
         }
 
         if (message != null) {
-            Card(Modifier.fillMaxWidth()) {
+            Card(modifier = Modifier.fillMaxWidth()) {
                 Column(Modifier.padding(12.dp)) {
                     if (loading) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -265,6 +318,7 @@ private fun WalletTab(viewModel: StakingViewModel, publicKey: String) {
         Spacer(Modifier.height(24.dp))
     }
 }
+
 
 @Composable
 private fun MiningTab(viewModel: StakingViewModel) {
@@ -341,7 +395,9 @@ private fun MiningTab(viewModel: StakingViewModel) {
                 if (balances.isEmpty()) {
                     Text("—")
                 } else {
-                    balances.forEach { (code, bal) ->
+                    balances.forEach { entry ->
+                        val code = entry.key
+                        val bal = entry.value
                         Row(
                             Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceBetween

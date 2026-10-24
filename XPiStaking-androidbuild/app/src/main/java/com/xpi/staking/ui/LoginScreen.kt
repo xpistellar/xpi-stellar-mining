@@ -3,8 +3,6 @@ package com.xpi.staking.ui
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
-import android.content.Intent
-import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,7 +26,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -90,9 +87,7 @@ fun LoginScreen(
         if (created != null) {
             Card(
                 modifier = Modifier.fillMaxWidth(),
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer
-                )
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
             ) {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text(
@@ -103,7 +98,7 @@ fun LoginScreen(
                     Text(stringResource(R.string.wallet_created_warning), fontSize = 13.sp)
                     Text("Public key", fontWeight = FontWeight.SemiBold)
                     Text(created.publicKey, fontSize = 11.sp, fontFamily = FontFamily.Monospace)
-                    Text("Secret key (SAVE NOW)", fontWeight = FontWeight.SemiBold)
+                    Text("Secret key", fontWeight = FontWeight.SemiBold)
                     Text(created.secretKey, fontSize = 11.sp, fontFamily = FontFamily.Monospace)
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         OutlinedButton(onClick = {
@@ -114,44 +109,17 @@ fun LoginScreen(
                             Text(stringResource(R.string.i_saved_secret))
                         }
                     }
+                    Text(
+                        "Next: open Wallet tab → buy XLM → create XPi trustline.",
+                        fontSize = 12.sp,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
                 }
             }
             return@Column
         }
 
-        Button(
-            onClick = { viewModel.createWallet() },
-            enabled = !loading,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(stringResource(R.string.create_wallet))
-        }
-        Text(
-            text = stringResource(R.string.create_wallet_hint),
-            fontSize = 12.sp,
-            lineHeight = 16.sp,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.fillMaxWidth().padding(top = 6.dp, bottom = 10.dp)
-        )
-
-        OutlinedButton(
-            onClick = {
-                context.startActivity(
-                    Intent(Intent.ACTION_VIEW, Uri.parse("https://stellarterm.com/signup/"))
-                )
-            },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(stringResource(R.string.signup_button))
-        }
-        Text(
-            text = stringResource(R.string.signup_hint),
-            fontSize = 12.sp,
-            lineHeight = 16.sp,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.fillMaxWidth().padding(top = 8.dp, bottom = 12.dp)
-        )
-
+        // Language
         Text(stringResource(R.string.language), style = MaterialTheme.typography.labelLarge)
         Spacer(Modifier.height(6.dp))
         ExposedDropdownMenuBox(expanded = langExpanded, onExpandedChange = { langExpanded = it }) {
@@ -177,7 +145,11 @@ fun LoginScreen(
             }
         }
 
-        Spacer(Modifier.height(16.dp))
+        Spacer(Modifier.height(20.dp))
+
+        // 1) Login
+        Text("Already have a wallet?", fontWeight = FontWeight.SemiBold, modifier = Modifier.fillMaxWidth())
+        Spacer(Modifier.height(8.dp))
         OutlinedTextField(
             value = secret,
             onValueChange = { secret = it },
@@ -187,7 +159,7 @@ fun LoginScreen(
             visualTransformation = PasswordVisualTransformation(),
             enabled = !loading
         )
-        Spacer(Modifier.height(16.dp))
+        Spacer(Modifier.height(12.dp))
         Button(
             onClick = { viewModel.login(secret) },
             enabled = !loading && secret.isNotBlank(),
@@ -196,8 +168,27 @@ fun LoginScreen(
             if (loading) CircularProgressIndicator(modifier = Modifier.size(20.dp), strokeWidth = 2.dp)
             else Text(stringResource(R.string.login))
         }
+
+        Spacer(Modifier.height(24.dp))
+
+        // 2) Signup in-app only
+        Text("New user?", fontWeight = FontWeight.SemiBold, modifier = Modifier.fillMaxWidth())
+        Spacer(Modifier.height(8.dp))
+        OutlinedButton(
+            onClick = { viewModel.createWallet() },
+            enabled = !loading,
+            modifier = Modifier.fillMaxWidth()
+        ) { Text(stringResource(R.string.create_wallet)) }
+        Text(
+            stringResource(R.string.create_wallet_hint),
+            fontSize = 12.sp,
+            lineHeight = 16.sp,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.fillMaxWidth().padding(top = 6.dp)
+        )
+
         if (error != null) {
-            Spacer(Modifier.height(12.dp))
+            Spacer(Modifier.height(16.dp))
             Card(
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.errorContainer),
                 modifier = Modifier.fillMaxWidth()
