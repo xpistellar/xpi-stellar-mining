@@ -552,3 +552,116 @@ Play the classic XPI Space Mining hangar and combat experience, then earn **XPi*
 ---
 
 *Play the game. Earn on-chain.*
+**XPi Game Rewards Integration Guide**
+
+A simple, no-custody reward system for Android games on Stellar.
+
+Players stake XLM in the official XPI Mining app.  
+Your game just calls one function.  
+You never handle private keys, tokens, or blockchain transactions.
+
+---
+
+### Why use this?
+
+- **Zero coin management** — You don’t create, distribute, or custody any token.
+- **Built-in anti-abuse** — Players must lock real value (XLM) for 48+ hours.
+- **Tiny but frequent rewards** — Perfect for daily/login/achievement rewards.
+- **Developer monetization** — Players can also generate small rewards for *you*.
+- **One-line integration** — Works with any Android game that can call a Kotlin/Java method.
+
+---
+
+### How it works (Player side)
+
+1. Player installs the official **XPI Mining** app and creates/logs in with a Stellar wallet.
+2. Player buys a small amount of XLM and stakes **≥ 31.4 XLM**.
+3. Player keeps the stake for **at least 48 hours**.
+4. Player plays your game.
+5. Your game calls `XpiBridge.claimGame()`.
+6. The smart contract checks conditions and sends **0.0000003 XPi** to the player.
+
+That’s it.
+
+---
+
+### Integration (Developer side)
+
+#### 1. Basic Reward (Recommended)
+
+Whenever you want to give the player a small on-chain reward (level complete, daily login, achievement…):
+
+```kotlin
+XpiBridge.claimGame()
+```
+
+That’s the entire integration for most games.
+
+#### 2. Optional – Claim staking rewards
+
+```kotlin
+XpiBridge.claim()
+```
+
+#### 3. Optional – Developer reward (monetization)
+
+Players can also generate a tiny reward for the game developer:
+
+1. Player binds your developer address once (via the official app or a future UI).
+2. Player calls `claim_for_developer`.
+3. You receive 0.0000003 XPi (limited to protect against spam).
+
+---
+
+### Requirements & Limits (Anti-abuse)
+
+| Action                    | Who receives | Player limit     | Developer limit   | Requirements                     |
+|---------------------------|--------------|------------------|-------------------|----------------------------------|
+| `claim_game`              | Player       | 10 times / day   | —                 | Stake ≥ 31.4 XLM + ≥ 48 hours    |
+| `claim_for_developer`     | Developer    | 1 time / day     | 100–200 / day     | Stake ≥ 31.4 XLM + ≥ 48 hours + bound |
+| Unstake below 31.4 XLM    | —            | —                | —                 | Resets the 48-hour timer         |
+
+Rewards are intentionally very small so that scripting is economically unattractive.
+
+---
+
+### Technical Notes
+
+- The official app holds the player’s secret key and signs all transactions.
+- Your game never sees private keys.
+- All logic (limits, 48h lock, stake checks) lives in the Soroban smart contract.
+- Network: Stellar Public + Soroban Mainnet
+- Token: XPi  
+  Issuer: `GDOFJEZ3FUWAC2EVHPRMJPSWPOD3KJF7FTXFZIERFFPB2VMTRQLZFUEF`
+- Contract: `CDQ4OO3FU3CBNVWZX2GDU4BQQNQFAHBITTXULTVIECY4OMJGTM33M73H`
+
+---
+
+### Quick Start Checklist
+
+1. Tell players to install the official XPI Mining app and stake ≥ 31.4 XLM.
+2. In your game, call `XpiBridge.claimGame()` at reward moments.
+3. (Optional) Support developer rewards via `claim_for_developer`.
+4. Handle the case when the player is not logged in or has not met the 48h requirement (show a friendly message directing them to the official app).
+
+---
+
+### Example Use Cases
+
+- Daily login reward
+- Level completion bonus
+- Achievement unlocked
+- Weekly challenge reward
+- “Support the developer” button that triggers `claim_for_developer`
+
+---
+
+### Summary
+
+You get a ready-made, anti-abuse reward system without ever touching tokens, wallets, or blockchain code.
+
+Players lock real value → become eligible for rewards.  
+Your game just triggers the claim.  
+You can even earn a small cut when players support you.
+
+Simple. Secure. Effective monetization layer for games.
