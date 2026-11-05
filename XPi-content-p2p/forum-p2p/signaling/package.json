@@ -1,0 +1,6 @@
+{
+  "name": "forum-p2p-signaling",
+  "private": true,
+  "type": "module",
+  "scripts": { "start": "node server.js" }
+}

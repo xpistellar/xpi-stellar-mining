@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Forum P2P</title>
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body>
+    <header>
+      <div>
+        <p class="kicker">local node</p>
+        <h1>Forum phi tập trung</h1>
+      </div>
+      <p id="node" class="meta"></p>
+    </header>
+
+    <section class="panel" id="gate">
+      <h2>Vào node</h2>
+      <form id="session">
+        <label>Secret key Stellar (chỉ gửi tới process local)
+          <input name="secretKey" type="password" placeholder="S..." autocomplete="off" required />
+        </label>
+        <label>Disk cam kết local (GB) — không có trên chain
+          <input name="diskGb" type="number" min="0" step="1" value="100" />
+        </label>
+        <button type="submit">Đọc số dư on-chain</button>
+      </form>
+      <p id="stake" class="meta"></p>
+    </section>
+
+    <section class="layout">
+      <main>
+        <form id="composer" class="panel" hidden>
+          <h2>Topic mới</h2>
+          <input name="title" maxlength="140" placeholder="Tiêu đề" required />
+          <textarea name="body" maxlength="8000" rows="5" placeholder="Nội dung" required></textarea>
+          <button type="submit">Đăng</button>
+          <p id="composer-msg" class="meta"></p>
+        </form>
+        <div id="feed"></div>
+      </main>
+      <aside>
+        <section class="panel">
+          <h2>Xếp hạng</h2>
+          <h3>Top view</h3>
+          <ol id="top-view"></ol>
+          <h3>Top like</h3>
+          <ol id="top-like"></ol>
+          <h3>Top trend</h3>
+          <ol id="top-trend"></ol>
+        </section>
+        <section class="panel">
+          <h2>Stake XLM</h2>
+          <input id="stake-amount" type="number" min="31.4" step="0.1" value="31.4" />
+          <div class="row">
+            <button id="stake-btn" type="button">Stake</button>
+            <button id="unstake-btn" type="button">Unstake</button>
+            <button id="claim" type="button">Claim</button>
+          </div>
+          <p id="reward" class="meta"></p>
+          <p id="balance" class="meta"></p>
+        </section>
+      </aside>
+    </section>
+    <script src="/js/app.js" type="module"></script>
+  </body>
+</html>

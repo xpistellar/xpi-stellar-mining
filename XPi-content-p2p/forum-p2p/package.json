@@ -1,0 +1,20 @@
+{
+  "name": "forum-p2p",
+  "version": "0.2.0",
+  "private": true,
+  "description": "Forum node with Soroban claim-content calls and browser WebRTC sync.",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "signaling": "node signaling/server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@stellar/stellar-sdk": "^13.3.0",
+    "express": "^4.21.2",
+    "ws": "^8.18.0"
+  }
+}

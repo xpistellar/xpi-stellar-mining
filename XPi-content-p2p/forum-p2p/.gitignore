@@ -1,0 +1,5 @@
+node_modules/
+data/*.disk
+data/metadata.json
+.env
+*.log
