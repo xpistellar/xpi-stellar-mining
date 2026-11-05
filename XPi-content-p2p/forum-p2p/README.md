@@ -209,3 +209,14 @@ forum-p2p/
 - **402** — the session balance no longer covers the local topic or like fee. Open the session again to re-read Horizon.
 - **`blocked by local filter`** — the post hit the keyword list or is too short.
 - Signaling down — one-machine use still works.
+
+# 12. LocalMod 
+git clone https://github.com/KOKOSde/localmod.git
+cd localmod
+pip install -e .
+python scripts/download_models.py   # ~3.5 GB, chỉ 1 lần
+localmod serve --port 8000 --device cpu
+
+# 12.1 Forum
+export LOCALMOD_URL=http://127.0.0.1:8000
+npm start

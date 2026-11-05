@@ -133,7 +133,7 @@ export function mountRoutes(app, ctx) {
       }
       const title = String(req.body?.title || "").slice(0, 140);
       const body = String(req.body?.body || "").slice(0, 8000);
-      const check = moderate(`${title}\n${body}`);
+      const check = await moderate(`${title}\n${body}`);
       if (!check.ok) return res.status(400).json({ error: check.reason });
       if (!canAfford(ctx.session.balance, config.topicFee)) {
         return res.status(402).json({ error: "insufficient XLM" });

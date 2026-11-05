@@ -14,6 +14,8 @@ export const config = {
   rpcUrl: process.env.SOROBAN_RPC_URL || "https://mainnet.sorobanrpc.com",
   fee: process.env.TX_FEE || "500000",
   network: "PUBLIC",
+  /** LocalMod self-hosted API (leave empty to disable). Example: http://127.0.0.1:8000 */
+  localmodUrl: process.env.LOCALMOD_URL || "",
 };
 
 export function signalingWsUrl() {
