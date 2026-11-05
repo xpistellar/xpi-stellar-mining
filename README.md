@@ -668,29 +668,31 @@ Simple. Secure. Effective monetization layer for games.
 
 **Full Guide — forum-p2p**
 
-Decentralized forum node, minimal version that runs on **Windows** and **Ubuntu**.
+# forum-p2p — full guide
 
-Android relay and real WebRTC DataChannel are **not** included in this version. Peer connections currently use an in-process message queue so you can run the UI + stake + post/like fees first. Where to attach `wrtc` is clearly noted at the end of the file.
+A local forum node for Windows and Ubuntu. It serves a web UI, stakes XLM through the live Soroban contract, stores posts in an encrypted virtual-disk file, and syncs post metadata over WebRTC.
 
-### 1. Requirements
+Android relay is not included.
 
-- Node.js **18 or higher** (recommended 20 or 22).
-- No Cloudflare, no database, no GPU needed.
-- Default ports: forum `3000`, signaling `4000`.
+## 1. Requirements
 
-Check:
+- Node.js 18 or newer (20 or 22 recommended).
+- A Stellar account on **public** mainnet, funded with a little XLM for fees.
+- No Cloudflare account, no database, no GPU.
+
+Default ports: forum `3000`, signaling `4000`.
 
 ```bash
 node -v
 npm -v
 ```
 
-### 2. Extract and install
+## 2. Install
 
-Ubuntu / macOS / Git Bash:
+Linux, macOS, or Git Bash:
 
 ```bash
-unzip forum-p2p.zip
+unzip forum-p2p-full.zip
 cd forum-p2p
 npm install
 ```
@@ -698,40 +700,44 @@ npm install
 Windows PowerShell:
 
 ```powershell
-Expand-Archive -Force forum-p2p.zip -DestinationPath .
+Expand-Archive -Force forum-p2p-full.zip -DestinationPath .
 cd forum-p2p
 npm install
 ```
 
-`npm install` only pulls `express`. No native modules, no C++ build required.
+Dependencies: `express`, `ws`, `@stellar/stellar-sdk`. No native addons.
 
-### 3. Run the forum node
+## 3. Run
+
+Terminal 1, signaling (optional, needed only to connect two browsers):
+
+```bash
+npm run signaling
+```
+
+Terminal 2, forum:
 
 ```bash
 npm start
 ```
 
-Open the browser: [http://localhost:3000](http://localhost:3000)
+Open http://localhost:3000. Stop a process with Ctrl+C.
 
-Stop: `Ctrl + C`.
+## 4. Configuration
 
-#### Environment variables (optional)
+The process does **not** read a `.env` file by itself. Export variables before `npm start`, or rely on the defaults in `src/utils/config.js`.
 
-Copy the sample and edit:
-
-```bash
-cp .env.example .env
-```
-
-The node **does not automatically read** the `.env` file. Export the variables before running, or set them directly.
-
-Ubuntu:
+Linux:
 
 ```bash
 export PORT=3000
 export SIGNALING_URL=http://127.0.0.1:4000
 export DISK_PATH=./data/network-data.disk
 export MIN_DISK_GB=100
+export HORIZON_URL=https://horizon.stellar.org
+export SOROBAN_RPC_URL=https://mainnet.sorobanrpc.com
+export CONTRACT_ID=CDQ4OO3FU3CBNVWZX2GDU4BQQNQFAHBITTXULTVIECY4OMJGTM33M73H
+export TX_FEE=500000
 npm start
 ```
 
@@ -740,93 +746,111 @@ Windows PowerShell:
 ```powershell
 $env:PORT = "3000"
 $env:SIGNALING_URL = "http://127.0.0.1:4000"
+$env:CONTRACT_ID = "CDQ4OO3FU3CBNVWZX2GDU4BQQNQFAHBITTXULTVIECY4OMJGTM33M73H"
 npm start
 ```
 
 | Variable | Default | Meaning |
 | --- | --- | --- |
-| `PORT` | `3000` | UI + API port |
-| `SIGNALING_URL` | `http://127.0.0.1:4000` | Bootstrap server |
-| `NODE_ID` | auto-generated | Node name |
-| `DISK_PATH` | `./data/network-data.disk` | Encrypted virtual disk file |
-| `MIN_DISK_GB` | `100` | Threshold required to post / like |
-| `TOPIC_FEE` | `0.0000021` | Fee to create a topic |
-| `LIKE_FEE` | `0.0000001` | Fee for one like |
-| `STELLAR_SECRET` | empty | Not yet sent on-chain |
-| `CONTRACT_ID` | empty | Contract ID when you attach Soroban |
+| `PORT` | `3000` | Local UI and API |
+| `SIGNALING_URL` | `http://127.0.0.1:4000` | Bootstrap server. The browser uses the same host with `ws://` |
+| `NODE_ID` | random | Name announced to peers |
+| `DISK_PATH` | `./data/network-data.disk` | Virtual disk file |
+| `MIN_DISK_GB` | `100` | Disk size required before posting |
+| `TOPIC_FEE` | `0.0000021` | Local topic fee, subtracted from the displayed XLM balance |
+| `LIKE_FEE` | `0.0000001` | Local like fee |
+| `VIEW_MILESTONE` | `1000000` | Ranking hint only. The live contract has no view-reward call |
+| `HORIZON_URL` | `https://horizon.stellar.org` | Account source for transactions |
+| `SOROBAN_RPC_URL` | `https://mainnet.sorobanrpc.com` | Simulate and submit |
+| `CONTRACT_ID` | `CDQ4OO3FU3CBNVWZX2GDU4BQQNQFAHBITTXULTVIECY4OMJGTM33M73H` | Live staking contract |
+| `TX_FEE` | `500000` | Inclusion fee in stroops (0.05 XLM) |
 
-### 4. Using the interface
+`CONTRACT_ID` must point at the contract that is actually deployed. The methods the node calls today are `stake`, `unstake`, `claim`, `get_stake`, and `pending`.
 
-1. **Private key** — password field, exists only in the browser session / server RAM until the process is stopped. The demo uses it as the disk encryption key; it is not sent over the network.
-2. **XPi / XLM** — local balance used to deduct fees. Default `1`.
-3. **Disk (GB)** — must be **≥ 100** and XPi **> 0** to be allowed to write.
-4. Click **Enter node**.
-5. Write a topic. Each post deducts `0.0000021`.
-6. **Like** deducts `0.0000001` from the liker and adds it to the author (`earned`).
-7. Hovering over a post for the first time adds 1 view.
-8. Right column: top view, top like, top trend (view + like divided by post age).
-9. **Estimated claim today** — off-chain formula, does not call the contract yet.
+## 5. Using the UI
 
-Local filter blocks some crude keywords (`porn`, `xxx`, `drug deal`, `bomb making`) and posts that are too short. This is not a Qwen model.
+1. Paste the Stellar **secret key** (`S...`). It stays in the local Node process for that session. It is the disk encryption key and the transaction signer. It is not sent to other peers.
+2. Set **disk GB**. This is a local commitment. The chain cannot see the file.
+3. Click the button that reads the chain. The node calls `get_stake` and `pending` (simulate only) and reads the native XLM balance from Horizon.
+4. You can post only when all of these are true:
+   - the virtual disk was allocated at **≥ 100 GB**
+   - on-chain stake is **≥ 31.4 XLM**
+   - the wallet still covers the local topic fee
+5. **Stake** sends `stake(address, amount)`. Minimum **31.4 XLM**. The inclusion fee is about 0.05 XLM.
+6. **Unstake** sends `unstake(address, amount)`. Amount `0` withdraws the whole stake.
+7. **Claim** sends `claim(address)` and pays the contract’s continuous staking reward.
+8. Write a topic. The local fee is subtracted in the app. This deployed contract has no `pay_for_topic`.
+9. **Like** subtracts the local like fee and increases the author’s like count in the disk file. This deployed contract has no `like_post`.
+10. Moving the pointer onto a post once adds one local view.
+11. The side column shows top view, top like, and top trend. Trend is `(views + likes × 8) / age in hours`.
 
-### 5. Signaling (bootstrap machine)
+A short keyword filter blocks a few terms and very short posts. It is not a language model.
 
-Second terminal, same directory:
+## 6. Virtual disk
+
+On login the node creates or grows `data/network-data.disk` to the GB value you entered (1 GB = 1024³ bytes).
+
+- The file is sparse, like a thin `.vmdk`: the filesystem reports the full size, disk blocks are used as data is written.
+- Posts are AES-256-GCM, key derived with scrypt from the secret key. The ciphertext sits at the start of the file. Later writes do not shrink the allocation.
+- A different secret key cannot decrypt an existing file.
+- Deleting the file deletes local posts. The path is gitignored.
+- The chain does not check this file. `commit_disk` exists only in the **upgrade** contract (`contracts/xpi-forum.rs`), which is not the contract at `CDQ4OO3F…` until you deploy and upgrade.
+
+## 7. Signaling and WebRTC
 
 ```bash
 npm run signaling
 ```
 
-Listens on port `4000`. The forum node on startup will `POST /announce`. If signaling is off, the forum still runs and logs `bootstrap skipped`.
+Listens on port 4000 for HTTP and WebSocket.
 
-Two machines on the same LAN:
+- Each browser says hello with its node id, stake, and disk GB.
+- The server sends the peer list, highest stake and disk first.
+- The browser opens an `RTCDataChannel` named `forum`, using Google STUN, and exchanges SDP and ICE through the signaling socket.
+- A peer message is a JSON list of posts. The node merges them with `POST /api/sync` (same id: keep the higher view and like counts).
+- If signaling is down, the forum still runs on one machine. You only lose peer sync.
 
-- Machine A runs signaling and opens firewall port 4000.
-- Machine B: `SIGNALING_URL=http://<ip-of-machine-A>:4000 npm start`.
+Two machines on one LAN: machine A runs signaling and opens port 4000. Machine B starts with `SIGNALING_URL=http://<machine-A-ip>:4000`.
 
-Signaling API:
+## 8. Local API
 
-- `POST /announce` JSON body `{ "id", "stakeXlm", "diskGb" }` → returns other peers, ordered by highest stake first.
-- `GET /peers` → list of still-alive peers (TTL 60 seconds).
-
-### 6. Local API
-
-| Method | Path | Action |
+| Method | Path | Body / result |
 | --- | --- | --- |
-| GET | `/api/health` | node id + peers seen |
-| POST | `/api/session` | `{ secretKey, xlm, diskGb }` |
-| GET | `/api/posts` | posts + 3 ranking tables |
-| POST | `/api/posts` | `{ title, body }` |
+| GET | `/api/health` | node id, network, contract id, signaling WebSocket URL |
+| POST | `/api/session` | `{ "secretKey", "diskGb" }` → chain balances, stake, disk file size |
+| GET | `/api/posts` | posts and three rankings |
+| POST | `/api/posts` | `{ "title", "body" }` local post |
 | POST | `/api/posts/:id/view` | +1 view |
-| POST | `/api/posts/:id/like` | transfer like fee |
-| POST | `/api/claim` | estimate reward/day |
+| POST | `/api/posts/:id/like` | local like fee |
+| POST | `/api/sync` | `{ "posts": [...] }` from a peer |
+| POST | `/api/stake` | `{ "xlm": "31.4" }` on-chain stake |
+| POST | `/api/unstake` | `{ "xlm": "0" }` on-chain unstake (`0` = all) |
+| POST | `/api/claim` | on-chain `claim` |
 
-Examples:
+Example that only checks the process (a real secret is required for `/api/session`):
 
 ```bash
 curl -s http://127.0.0.1:3000/api/health
-curl -s -X POST http://127.0.0.1:3000/api/session \
-  -H 'content-type: application/json' \
-  -d '{"secretKey":"SDEMOKEY12345678","xlm":1,"diskGb":120}'
-curl -s -X POST http://127.0.0.1:3000/api/posts \
-  -H 'content-type: application/json' \
-  -d '{"title":"Hello","body":"First post"}'
 ```
 
-### 7. Where the data lives
+## 9. Upgrade contract (not deployed yet)
 
-- `data/network-data.disk` — JSON of posts + stake, encrypted with **AES-256-GCM**.
-- Key is derived with `scrypt` from the private key you enter. Changing the key makes the old file unreadable.
-- Deleting the disk file = loss of local posts. This file is not committed (already in `.gitignore`).
+`contracts/xpi-forum.rs` keeps the current stake storage and adds forum calls. Details are in `contracts/FORUM-CONTRACT.md`.
 
-Estimated reward in `src/stellar/claim.js`:
+| Call | Role |
+| --- | --- |
+| `commit_disk(user, gb)` | Record a self-declared disk size. Not a proof. |
+| `can_write(user)` | True only after ≥ 31.4 XLM staked for 48 hours and disk ≥ 100 GB |
+| `pay_for_topic(user, post_id)` | Charge 0.0000021 XPi into the contract. `post_id` is 32 bytes |
+| `like_post(from, post_id)` | Send 0.0000001 XPi to the author |
+| `set_oracle` / `attest_views` | Only the bootstrap oracle may raise the view counter |
+| `claim_view_reward` | Author withdraws 1 XPi from the XPi treasury per 1,000,000 attested views |
 
-- base = `XLM * 0.001`
-- disk = additional `0.00001` per 10 GB
+Do not point `CONTRACT_ID` at this source file until the WASM is deployed with `upgrade`. Until then the node must keep calling `stake`, `unstake`, `claim`, `get_stake`, and `pending` only.
 
-Like / topic currently **deduct balance in RAM**, no Stellar transaction is issued yet. Functions are in `src/stellar/like.js` and `src/stellar/stake.js` so you can replace them with `@stellar/stellar-sdk`.
+View rewards are intentionally not self-reported. Peers can lie about views. The oracle key is set by the admin.
 
-### 8. Directory layout
+## 10. Layout
 
 ```text
 forum-p2p/
@@ -834,65 +858,24 @@ forum-p2p/
   HUONG-DAN.md
   README.md
   .env.example
-  public/                UI
-  signaling/server.js    bootstrap peer list
-  src/index.js           startup
-  src/server/            Express + routes
-  src/storage/           encrypted disk + rankings
-  src/p2p/               peer, signaling client, message channel
-  src/stellar/           stake, like, claim (off-chain)
-  src/moderation/        keyword filter
-  data/                  created at runtime
+  public/                 UI
+  signaling/server.js     WebSocket bootstrap
+  src/index.js
+  src/server/             Express routes
+  src/storage/            sparse virtual disk + rankings
+  src/p2p/                peer ordering
+  src/stellar/            Horizon + Soroban calls
+  src/moderation/         keyword filter
+  contracts/              xpi-forum.rs and the previous contract
+  data/                   created at runtime
 ```
 
-### Soroban (version 0.2)
+## 11. Common errors
 
-The file `stake-claim-31.js` is not in the workspace. The client calls the exact function names from the Claim Content design. Your contract must have these functions (if the names differ, edit `src/stellar/chain.js`):
-
-| Function | Parameters |
-| --- | --- |
-| `pay_for_topic` | `(user Address, amount i128)` |
-| `like_post` | `(user Address, creator Address, amount i128)` |
-| `claim` | `(user Address)` |
-| `claim_view_reward` | `(creator Address, post_id String, view_count u64)` |
-| `get_stake` | `(user Address) -> i128` optional |
-| `balance` | on `XPI_CONTRACT`, `(user Address) -> i128` optional |
-
-Amounts use 7 decimal places (`0.0000021` = 21 stroops).
-
-Required environment variables when calling the chain:
-
-```bash
-export STELLAR_NETWORK=TESTNET
-export HORIZON_URL=https://horizon-testnet.stellar.org
-export SOROBAN_RPC_URL=https://soroban-testnet.stellar.org
-export CONTRACT_ID=C...
-export XPI_CONTRACT=C...   # or XPI_CODE + XPI_ISSUER
-npm start
-```
-
-The form no longer has a balance input field. The secret key is used only for signing and reading Horizon/RPC. Disk GB is still declared locally because the chain does not know disk size.
-
-View milestone: `VIEW_MILESTONE` (default 1000000). When your own views reach a multiple of the milestone, the node calls `claim_view_reward` once for that milestone.
-
-### WebRTC
-
-`npm run signaling` opens HTTP + WebSocket on port 4000. The browser creates an `RTCDataChannel` named `forum`, uses Google STUN, and sends post metadata. The node receives `POST /api/sync` and merges by id (takes the higher view/like counts). Does not use native `wrtc`.
-
-### Running
-
-```bash
-npm install
-npm run signaling   # terminal 1
-npm start           # terminal 2
-```
-
-Open http://localhost:3000 — paste secret key, disk GB, click to read balance. Posting only succeeds when `CONTRACT_ID` points to a real contract and the `pay_for_topic` transaction succeeds.
-
-### 10. Common errors
-
-- **`EADDRINUSE`** — port 3000 or 4000 is already in use. Change `PORT` or kill the old process.
-- **403 stake** — disk under 100 or XPi = 0. Click **Enter node** again.
-- **402 insufficient** — local balance exhausted after many posts/likes. Enter the node again with a higher balance (demo does not persist balance to disk).
-- **`blocked by local filter`** — content hits a forbidden keyword.
-- **Signaling silent** — the forum still works alone.
+- **`EADDRINUSE`** — port 3000 or 4000 is taken. Change `PORT` or stop the old process.
+- **`invalid encoded string`** — the secret key is not a Stellar `S...` key.
+- **Simulation failed** — the contract rejected the call (stake below 31.4 XLM, nothing to claim, contract paused, or not enough XLM for the fee).
+- **403** — disk under 100 GB or on-chain stake under 31.4 XLM.
+- **402** — the session balance no longer covers the local topic or like fee. Open the session again to re-read Horizon.
+- **`blocked by local filter`** — the post hit the keyword list or is too short.
+- Signaling down — one-machine use still works.
