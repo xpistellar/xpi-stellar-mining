@@ -668,214 +668,169 @@ Simple. Secure. Effective monetization layer for games.
 
 **Full Guide — forum-p2p**
 
-# forum-p2p — full guide
+# Forum P2P — Introduction & Installation
 
-A local forum node for Windows and Ubuntu. It serves a web UI, stakes XLM through the live Soroban contract, stores posts in an encrypted virtual-disk file, and syncs post metadata over WebRTC.
+Forum P2P is **open-source software** in the **XPi (Stellar)** ecosystem. Each installation is a **node**: encrypted local storage, optional WebRTC peer sync, and Stellar-wallet identity.
 
-Android relay is not included.
+## Goals
 
-## 1. Requirements
+### Democratize online discussion
 
-- Node.js 18 or newer (20 or 22 recommended).
-- A Stellar account on **public** mainnet, funded with a little XLM for fees.
-- No Cloudflare account, no database, no GPU.
+- Sign in with a **Stellar secret key** — no Google/Facebook account required.
+- Publish subject to mesh rules (e.g. on-chain stake thresholds).
+- Run your own node; choose **public** read access or **private** (view password).
 
-Default ports: forum `3000`, signaling `4000`.
+### Reduce dependence on ad-driven platforms
 
-```bash
-node -v
-npm -v
-```
+Value is intended to come from:
 
-## 2. Install
+- Community utility (discussion, knowledge, coordination).
+- Stellar / Soroban economics (staking, eligibility, claims — as implemented by contracts and the UI of your version).
 
-Linux, macOS, or Git Bash:
+Operating a node is analogous to running a **small internet machine** that hosts a slice of conversation and may receive protocol rewards when conditions are met.
 
-```bash
-unzip forum-p2p-full.zip
-cd forum-p2p
-npm install
-```
+## Two network modes
 
-Windows PowerShell:
+### Official genesis mesh (default)
 
-```powershell
-Expand-Archive -Force forum-p2p-full.zip -DestinationPath .
-cd forum-p2p
-npm install
-```
+On first boot the node applies the **official network hash and signaling** (unless overridden). Suitable for public XPi discussion, FAQs, and project topics.
 
-Dependencies: `express`, `ws`, `@stellar/stellar-sdk`. No native addons.
+### Private network or hard fork
 
-## 3. Run
+From **Setup node** in the UI:
 
-Terminal 1, signaling (optional, needed only to connect two browsers):
+| Action | Effect |
+|--------|--------|
+| **Create network** | New genesis hash on this node; share hash + signaling with peers |
+| **Hard fork** | New hash + signaling, **keep local disk posts**, leave the old mesh permanently |
 
-```bash
-npm run signaling
-```
+Private mode + view password further limits casual indexing.
 
-Terminal 2, forum:
+## Installation
 
-```bash
-npm start
-```
+### Windows
 
-Open http://localhost:3000. Stop a process with Ctrl+C.
-
-## 4. Configuration
-
-The process does **not** read a `.env` file by itself. Export variables before `npm start`, or rely on the defaults in `src/utils/config.js`.
-
-Linux:
-
-```bash
-export PORT=3000
-export SIGNALING_URL=http://127.0.0.1:4000
-export DISK_PATH=./data/network-data.disk
-export MIN_DISK_GB=100
-export HORIZON_URL=https://horizon.stellar.org
-export SOROBAN_RPC_URL=https://mainnet.sorobanrpc.com
-export CONTRACT_ID=CDQ4OO3FU3CBNVWZX2GDU4BQQNQFAHBITTXULTVIECY4OMJGTM33M73H
-export TX_FEE=500000
-npm start
-```
-
-Windows PowerShell:
+1. Install [Node.js LTS](https://nodejs.org/).
+2. Extract the repository.
+3. PowerShell:
 
 ```powershell
+cd forum-p2p
+npm install
 $env:PORT = "3000"
-$env:SIGNALING_URL = "http://127.0.0.1:4000"
-$env:CONTRACT_ID = "CDQ4OO3FU3CBNVWZX2GDU4BQQNQFAHBITTXULTVIECY4OMJGTM33M73H"
 npm start
 ```
 
-| Variable | Default | Meaning |
-| --- | --- | --- |
-| `PORT` | `3000` | Local UI and API |
-| `SIGNALING_URL` | `http://127.0.0.1:4000` | Bootstrap server. The browser uses the same host with `ws://` |
-| `NODE_ID` | random | Name announced to peers |
-| `DISK_PATH` | `./data/network-data.disk` | Virtual disk file |
-| `MIN_DISK_GB` | `100` | Disk size required before posting |
-| `TOPIC_FEE` | `0.0000021` | Local topic fee, subtracted from the displayed XLM balance |
-| `LIKE_FEE` | `0.0000001` | Local like fee |
-| `VIEW_MILESTONE` | `1000000` | Ranking hint only. The live contract has no view-reward call |
-| `HORIZON_URL` | `https://horizon.stellar.org` | Account source for transactions |
-| `SOROBAN_RPC_URL` | `https://mainnet.sorobanrpc.com` | Simulate and submit |
-| `CONTRACT_ID` | `CDQ4OO3FU3CBNVWZX2GDU4BQQNQFAHBITTXULTVIECY4OMJGTM33M73H` | Live staking contract |
-| `TX_FEE` | `500000` | Inclusion fee in stroops (0.05 XLM) |
+4. Open `http://localhost:3000`.
+5. Sign in with any `S…` key. Use **Setup node** to claim ownership or fork.
 
-`CONTRACT_ID` must point at the contract that is actually deployed. The methods the node calls today are `stake`, `unstake`, `claim`, `get_stake`, and `pending`.
-
-## 5. Using the UI
-
-1. Paste the Stellar **secret key** (`S...`). It stays in the local Node process for that session. It is the disk encryption key and the transaction signer. It is not sent to other peers.
-2. Set **disk GB**. This is a local commitment. The chain cannot see the file.
-3. Click the button that reads the chain. The node calls `get_stake` and `pending` (simulate only) and reads the native XLM balance from Horizon.
-4. You can post only when all of these are true:
-   - the virtual disk was allocated at **≥ 100 GB**
-   - on-chain stake is **≥ 31.4 XLM**
-   - the wallet still covers the local topic fee
-5. **Stake** sends `stake(address, amount)`. Minimum **31.4 XLM**. The inclusion fee is about 0.05 XLM.
-6. **Unstake** sends `unstake(address, amount)`. Amount `0` withdraws the whole stake.
-7. **Claim** sends `claim(address)` and pays the contract’s continuous staking reward.
-8. Write a topic. The local fee is subtracted in the app. This deployed contract has no `pay_for_topic`.
-9. **Like** subtracts the local like fee and increases the author’s like count in the disk file. This deployed contract has no `like_post`.
-10. Moving the pointer onto a post once adds one local view.
-11. The side column shows top view, top like, and top trend. Trend is `(views + likes × 8) / age in hours`.
-
-A short keyword filter blocks a few terms and very short posts. It is not a language model.
-
-## 6. Virtual disk
-
-On login the node creates or grows `data/network-data.disk` to the GB value you entered (1 GB = 1024³ bytes).
-
-- The file is sparse, like a thin `.vmdk`: the filesystem reports the full size, disk blocks are used as data is written.
-- Posts are AES-256-GCM, key derived with scrypt from the secret key. The ciphertext sits at the start of the file. Later writes do not shrink the allocation.
-- A different secret key cannot decrypt an existing file.
-- Deleting the file deletes local posts. The path is gitignored.
-- The chain does not check this file. `commit_disk` exists only in the **upgrade** contract (`contracts/xpi-forum.rs`), which is not the contract at `CDQ4OO3F…` until you deploy and upgrade.
-
-## 7. Signaling and WebRTC
+### Ubuntu
 
 ```bash
-npm run signaling
+sudo apt update && sudo apt install -y nodejs npm   # or Node 20 via NodeSource
+cd forum-p2p && npm install
+export PORT=3000
+npm start
 ```
 
-Listens on port 4000 for HTTP and WebSocket.
+Use `pm2` or `systemd` for persistence. Terminate TLS with Nginx or Caddy.
 
-- Each browser says hello with its node id, stake, and disk GB.
-- The server sends the peer list, highest stake and disk first.
-- The browser opens an `RTCDataChannel` named `forum`, using Google STUN, and exchanges SDP and ICE through the signaling socket.
-- A peer message is a JSON list of posts. The node merges them with `POST /api/sync` (same id: keep the higher view and like counts).
-- If signaling is down, the forum still runs on one machine. You only lose peer sync.
+### Opalstack (recommended shared Node host)
 
-Two machines on one LAN: machine A runs signaling and opens port 4000. Machine B starts with `SIGNALING_URL=http://<machine-A-ip>:4000`.
+1. Create a **Node.js** app (Node ≥ 18).
+2. Deploy sources; run `npm install`.
+3. Environment: `PORT`, optional `NODE_DISK_SECRET`, optional `LOCALMOD_URL`.
+4. Start the app; attach domain + HTTPS.
+5. Preserve the `data/` directory across deploys.
 
-## 8. Local API
+WebSocket signaling: use the public genesis signal or a second Node app for self-hosted signaling.
 
-| Method | Path | Body / result |
-| --- | --- | --- |
-| GET | `/api/health` | node id, network, contract id, signaling WebSocket URL |
-| POST | `/api/session` | `{ "secretKey", "diskGb" }` → chain balances, stake, disk file size |
-| GET | `/api/posts` | posts and three rankings |
-| POST | `/api/posts` | `{ "title", "body" }` local post |
-| POST | `/api/posts/:id/view` | +1 view |
-| POST | `/api/posts/:id/like` | local like fee |
-| POST | `/api/sync` | `{ "posts": [...] }` from a peer |
-| POST | `/api/stake` | `{ "xlm": "31.4" }` on-chain stake |
-| POST | `/api/unstake` | `{ "xlm": "0" }` on-chain unstake (`0` = all) |
-| POST | `/api/claim` | on-chain `claim` |
+## After install
 
-Example that only checks the process (a real secret is required for `/api/session`):
+1. Home page rankings and categories load.
+2. Mesh banner shows identity OK.
+3. **Sign in** → **Setup node** (claim, access mode, moderation, create/fork).
+4. **My Acc** for stake and role tools.
+5. Public nodes: follow [MODERATION-GUIDE.md](./MODERATION-GUIDE.md).
 
-```bash
-curl -s http://127.0.0.1:3000/api/health
-```
+## Further reading
 
-## 9. Upgrade contract (not deployed yet)
+- [ECONOMICS.md](./ECONOMICS.md) — production cost, utility, content claims  
+- [Blog post (GitHub Pages)](./blog/xpi-forum-p2p-economics-and-architecture.md)
 
-`contracts/xpi-forum.rs` keeps the current stake storage and adds forum calls. Details are in `contracts/FORUM-CONTRACT.md`.
 
-| Call | Role |
-| --- | --- |
-| `commit_disk(user, gb)` | Record a self-declared disk size. Not a proof. |
-| `can_write(user)` | True only after ≥ 31.4 XLM staked for 48 hours and disk ≥ 100 GB |
-| `pay_for_topic(user, post_id)` | Charge 0.0000021 XPi into the contract. `post_id` is 32 bytes |
-| `like_post(from, post_id)` | Send 0.0000001 XPi to the author |
-| `set_oracle` / `attest_views` | Only the bootstrap oracle may raise the view counter |
-| `claim_view_reward` | Author withdraws 1 XPi from the XPi treasury per 1,000,000 attested views |
+# XPi & Forum P2P — Economic Design
 
-Do not point `CONTRACT_ID` at this source file until the WASM is deployed with `upgrade`. Until then the node must keep calling `stake`, `unstake`, `claim`, `get_stake`, and `pending` only.
+> Why hold XPi? Why run a forum node?
 
-View rewards are intentionally not self-reported. Peers can lie about views. The oracle key is set by the admin.
+If an asset is only a speculative store of value, demand collapses when the narrative fades. XPi is designed with **production cost** and **utility**. Forum P2P is one open-source surface where that utility can touch **content** and **node operation**.
 
-## 10. Layout
+## 1. XPi is a distribution tool, not only a vault
 
-```text
-forum-p2p/
-  package.json
-  HUONG-DAN.md
-  README.md
-  .env.example
-  public/                 UI
-  signaling/server.js     WebSocket bootstrap
-  src/index.js
-  src/server/             Express routes
-  src/storage/            sparse virtual disk + rankings
-  src/p2p/                peer ordering
-  src/stellar/            Horizon + Soroban calls
-  src/moderation/         keyword filter
-  contracts/              xpi-forum.rs and the previous contract
-  data/                   created at runtime
-```
+Under the current contract design direction:
 
-## 11. Common errors
+- XPi is minted on a **clear schedule**, with a **hard cap** on the order of **31.4 million**.
+- Daily mint flows into a **staking / reward contract**.
+- Controlled rewards can go to:
+  - **Gamers** (e.g. claim game — limited times per day),
+  - **Game developers** (developer claim — per-user and per-developer daily caps),
+  - **Content / node paths** as the ecosystem extends (forum claims, node operator claims).
 
-- **`EADDRINUSE`** — port 3000 or 4000 is taken. Change `PORT` or stop the old process.
-- **`invalid encoded string`** — the secret key is not a Stellar `S...` key.
-- **Simulation failed** — the contract rejected the call (stake below 31.4 XLM, nothing to claim, contract paused, or not enough XLM for the fee).
-- **403** — disk under 100 GB or on-chain stake under 31.4 XLM.
-- **402** — the session balance no longer covers the local topic or like fee. Open the session again to re-read Horizon.
-- **`blocked by local filter`** — the post hit the keyword list or is too short.
-- Signaling down — one-machine use still works.
+Economic loop (simplified):
+
+1. Users **stake XLM** (real market cost) → earn the right to participate in reward paths.
+2. The system distributes **XPi** to players, developers, and (where enabled) content/node contributors.
+3. Developers may sell or recirculate XPi to incentivize users.
+4. Demand to hold XPi rises because it is **used**, not only watched on a chart.
+
+## 2. Two layers of value
+
+| Layer | How XPi shows it | Economic meaning |
+|-------|------------------|------------------|
+| Production cost | XLM must be staked to earn XPi paths | Not printed from thin air |
+| Scarcity | Hard cap + tapering then fixed daily mint | Inflation control |
+| Utility | Rewards for gamers, developers, content/node roles | Real holding motive |
+| Transferability | Free trading on Stellar DEX | Price discovery |
+
+## 3. A common reward layer for builders
+
+Many game tokens inflate endlessly; each studio reinvents rewards and bears price risk alone.
+
+XPi aims at a **shared reward layer**:
+
+- Studios integrate claim flows instead of launching a weak game token on day one.
+- Players stake **XLM** (liquid, familiar) to participate.
+- Developers bind and earn from user activity under on-chain caps.
+- Supply rules stay global and auditable.
+
+Forum P2P extends the same philosophy toward **writers and node operators**: open-source nodes, optional content micro-fees / milestones, and node eligibility claims — always subject to the live contract and UI of the version you run.
+
+## 4. Content-oriented mechanics (forum surface)
+
+Illustrative design themes (numbers are protocol targets; verify on-chain and in-app):
+
+| Action | Intent |
+|--------|--------|
+| Comment / post gates | Stake thresholds (e.g. XLM on Soroban) reduce drive-by spam |
+| Topic / like micro-costs | Tiny XPi transfers can point value toward creators |
+| Views & rankings | Free to read; Top View / Like / Trend surfaces quality |
+| View milestones | Optional creator claims from reward pools |
+| Node operator | Stake + time eligibility → periodic node claim |
+
+**Anyone can run the open-source forum.** Reward eligibility still routes through the **shared XPi staking contracts**, not a private mint on each node.
+
+## 5. Completeness checklist
+
+A token design is more complete when it has:
+
+1. Costly issuance (XLM stake),
+2. Tight supply rules (hard cap + schedule),
+3. Concrete uses (game, dev, content, node),
+4. A demand loop (more apps → more participation → more reason to hold),
+5. Transparent, hard-to-loot on-chain logic.
+
+Open questions remain: sustained developer demand, claim size vs long-run price, concentration of rewards, and proof of content/node utility at scale. Those decide whether XPi becomes lasting infrastructure or a careful experiment.
+
+## 6. Bottom line
+
+XPi is built to be **held and used**: a vehicle that moves value among players, developers, and content/node contributors under scarce, costly issuance. Forum P2P is the open-source mesh where discussion itself can plug into that loop — without depending on a single ad platform’s monetization rules.

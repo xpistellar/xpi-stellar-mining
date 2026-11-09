@@ -86,6 +86,16 @@ npm start
 | `LIKE_FEE` | `0.0000001` | Fee for one like |
 | `STELLAR_SECRET` | empty | Not yet sent on-chain |
 | `CONTRACT_ID` | empty | Contract ID when you attach Soroban |
+| `LOCALMOD_URL` | (empty) | Optional LocalMod API, e.g. `http://127.0.0.1:8000` |
+
+### Content moderation
+
+Before a post is accepted the node runs a two-layer filter:
+
+1. **Hard-block** (always on) — multi-language regex (English + Vietnamese) for clear NSFW, extreme violence, hard drugs, and obvious spam. Message: `blocked by community filter`.
+2. **LocalMod** (optional) — offline self-hosted API for toxicity, spam, NSFW text, and PII. Enable with `export LOCALMOD_URL=http://127.0.0.1:8000`. If LocalMod is unreachable the node still works with hard-block only.
+
+Install LocalMod: https://github.com/KOKOSde/localmod
 
 ### 4. Using the interface
 
@@ -173,7 +183,7 @@ forum-p2p/
   src/storage/           encrypted disk + rankings
   src/p2p/               peer, signaling client, message channel
   src/stellar/           stake, like, claim (off-chain)
-  src/moderation/        keyword filter
+  src/moderation/        community filter (hard-block + optional LocalMod)
   data/                  created at runtime
 ```
 
@@ -226,5 +236,14 @@ Open http://localhost:3000 — paste secret key, disk GB, click to read balance.
 - **`EADDRINUSE`** — port 3000 or 4000 is already in use. Change `PORT` or kill the old process.
 - **403 stake** — disk under 100 or XPi = 0. Click **Enter node** again.
 - **402 insufficient** — local balance exhausted after many posts/likes. Enter the node again with a higher balance (demo does not persist balance to disk).
-- **`blocked by local filter`** — content hits a forbidden keyword.
+- **`blocked by community filter`** / **`blocked by moderation (...)`** — content failed the hard-block or LocalMod check.
 - **Signaling silent** — the forum still works alone.
+
+### Roles & admin
+
+- **super_admin**: 3 ví cố định `GA3KOPD7…`, `GAGVNFDX…`, `GA5UO7CU…` — quyền cao nhất.
+- **admin**: ví đăng nhập **đầu tiên** trên node này (`data/node-meta.json`).
+- **moderator**: do admin/super bổ nhiệm — ẩn/xoá/khôi phục bài.
+- Đăng nhập bằng secret key Stellar như cũ.
+
+Mỗi bài được **ký** bằng secret của tác giả. Peer hack không thể giả mạo bài của người khác khi sync.

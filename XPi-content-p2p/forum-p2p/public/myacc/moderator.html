@@ -1,0 +1,44 @@
+<div class="board-head">
+  <h2>My Account</h2>
+  <p class="meta">Role: <strong>moderator</strong> · network moderation (hide / delete / ban)</p>
+</div>
+<div class="admin-grid">
+  <div class="admin-card admin-card-wide">
+    <h3>Stake to comment &amp; post</h3>
+    <p class="meta">Stake at least <strong>31.4 XLM</strong> on Soroban.</p>
+    <div class="row">
+      <input id="stake-amount" type="number" min="31.4" step="0.1" value="31.4" style="max-width:140px" />
+      <button id="stake-btn" type="button">Stake 31.4 XLM</button>
+      <button id="unstake-btn" type="button" class="secondary">Unstake</button>
+      <button id="claim" type="button" class="secondary">Claim rewards</button>
+      <a class="button secondary" id="buy-xlm-link" href="https://stellarterm.com/buy-crypto?crypto=xlm&amp;network=stellar" target="_blank" rel="noopener">Buy XLM</a>
+    </div>
+    <p id="reward" class="meta"></p>
+  </div>
+  <div class="admin-card">
+    <h3>Bans</h3>
+    <div class="row" id="ban-box">
+      <input id="ban-address" placeholder="G… public key to ban" style="flex:1" />
+      <button id="ban-btn" type="button" class="danger">Ban comments 7 days</button>
+    </div>
+    <p id="appoint-msg" class="meta"></p>
+    <ul id="ban-list" class="staff-list"></ul>
+  </div>
+  <div class="admin-card admin-card-wide">
+    <h3>Post management</h3>
+    <div class="row" id="admin-post-filter-row">
+      <select id="post-filter-status">
+        <option value="">All statuses</option>
+        <option value="active">active</option>
+        <option value="hidden">hidden</option>
+        <option value="deleted">deleted</option>
+        <option value="mine">mine only</option>
+      </select>
+      <select id="post-filter-category">
+        <option value="">All categories</option>
+      </select>
+      <button id="post-filter-btn" type="button" class="secondary">Filter</button>
+    </div>
+    <div class="topic-list" id="admin-posts"></div>
+  </div>
+</div>

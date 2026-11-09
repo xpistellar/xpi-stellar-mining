@@ -1,0 +1,118 @@
+
+<p class="meta">
+  Default install joins the <strong>official genesis mesh</strong>.
+  Sign in first. Claim this machine, set public/private access, enable moderation, or create / hard-fork a private network.
+</p>
+<p class="meta" id="setup-node-status">Loading node status…</p>
+
+<div class="admin-card" style="margin-top:12px">
+  <h3>A) Public / Private (indexing)</h3>
+  <p class="meta">
+    <strong>Public</strong> (default genesis): anyone can read.
+    <strong>Private</strong>: visitors need a view password.
+  </p>
+  <div class="row">
+    <label class="row" style="gap:8px;align-items:center">
+      <input type="radio" name="setup-access-mode" id="setup-access-public" value="public" checked />
+      Public
+    </label>
+    <label class="row" style="gap:8px;align-items:center">
+      <input type="radio" name="setup-access-mode" id="setup-access-private" value="private" />
+      Private
+    </label>
+  </div>
+  <label style="margin-top:8px;display:block">View password (required for Private)
+    <input type="password" id="setup-access-password" placeholder="set or change password" autocomplete="new-password" />
+  </label>
+  <div class="row" style="margin-top:8px">
+    <button type="button" id="setup-access-save">Save access mode</button>
+  </div>
+  <p class="meta" id="setup-access-msg"></p>
+</div>
+
+<div class="admin-card" style="margin-top:12px" id="setup-moderation-guide">
+  <h3>B) Content moderation (recommended)</h3>
+  <p class="meta">
+    Public nodes should run automated filtering plus human moderators.
+    Layer 1 hard-block is always on. Layer 2 uses
+    <a href="https://github.com/KOKOSde/localmod" target="_blank" rel="noopener">LocalMod</a>
+    via <code>LOCALMOD_URL</code>.
+  </p>
+  <ol class="meta" style="margin:8px 0 0;padding-left:1.2rem;line-height:1.55">
+    <li>Install LocalMod and listen on <code>127.0.0.1:8000</code>.</li>
+    <li>Set <code>LOCALMOD_URL=http://127.0.0.1:8000</code> and restart Forum P2P.</li>
+    <li>Super-admin appoints moderators for Hide / Delete / Ban.</li>
+  </ol>
+  <div class="row" style="margin-top:10px">
+    <a class="button" href="/docs/MODERATION-GUIDE.md" target="_blank" rel="noopener">Open full English guide</a>
+    <button type="button" class="secondary" id="setup-moderation-copy-env">Copy LOCALMOD_URL example</button>
+  </div>
+  <p class="meta" id="setup-moderation-msg"></p>
+</div>
+
+<div class="admin-card" style="margin-top:12px">
+  <h3>C) Claim this node (keep official mesh)</h3>
+  <p class="meta">First operator writes <code>data/node-meta.sealed</code> and becomes local node owner (claim_node). Super-admins stay fixed in code.</p>
+  <div class="row">
+    <button type="button" id="setup-claim-node">Claim node ownership</button>
+  </div>
+  <p class="meta" id="setup-claim-msg"></p>
+</div>
+
+<div class="admin-card" style="margin-top:12px">
+  <h3>D) Node reward eligibility</h3>
+  <p class="meta">≥31.4 XLM staked and ≥0.0314 XPi on-chain, ~48h, then claim_node (local ledger until on-chain).</p>
+  <div class="row">
+    <input id="setup-stake-xlm" type="number" min="31.4" step="0.1" value="31.4" style="max-width:120px" />
+    <button type="button" id="setup-stake-xlm-btn">Stake 31.4 XLM</button>
+    <button type="button" class="secondary" id="setup-stake-xpi-btn">Check XPi (0.0314)</button>
+    <button type="button" id="setup-claim-reward">Claim node reward</button>
+  </div>
+  <p class="meta" id="setup-reward-msg"></p>
+</div>
+
+<div class="admin-card" style="margin-top:12px">
+  <h3>E) Create private network (genesis on this node)</h3>
+  <p class="meta">Requires Sign in and ≥31.4 XLM stake. Generates a new <strong>networkHash</strong>. Share hash + signaling with peers. Local disk is re-keyed to this mesh identity.</p>
+  <label>Node name
+    <input id="genesis-node-name" placeholder="e.g. home-node-1" />
+  </label>
+  <label>Network label
+    <input id="genesis-label" placeholder="e.g. Family forum" />
+  </label>
+  <label>Signaling URL
+    <input id="genesis-signaling" placeholder="https://signal.xgoldmining.com" />
+  </label>
+  <div class="row" style="margin-top:8px">
+    <button type="button" id="genesis-submit">Create network</button>
+  </div>
+  <p id="genesis-msg" class="meta"></p>
+  <div id="genesis-result" hidden class="admin-card" style="margin-top:12px;border-color:var(--accent)">
+    <p class="meta" id="genesis-result-text"></p>
+    <p><strong>networkHash</strong> (copy for peers):</p>
+    <code id="genesis-result-hash" style="display:block;word-break:break-all;font-size:0.8rem"></code>
+    <button type="button" class="secondary" id="genesis-copy-hash" style="margin-top:8px">Copy hash</button>
+  </div>
+</div>
+
+<div class="admin-card" style="margin-top:12px;border-color:rgba(200,80,60,.35)">
+  <h3>F) Hard fork (keep local data · irreversible)</h3>
+  <p class="meta">New hash + signaling, <strong>keep local disk posts</strong>. Old mesh peers will not sync. Cannot auto-rejoin the original mesh from this node.</p>
+  <label>Network label
+    <input id="fork-label" placeholder="My private forum" />
+  </label>
+  <label>New signaling URL(s) — one per line
+    <textarea id="fork-signaling" rows="3" placeholder="https://your-signal.example.com"></textarea>
+  </label>
+  <label>New network hash (empty = generate)
+    <input id="fork-hash" placeholder="leave empty to generate" />
+  </label>
+  <label class="row" style="align-items:center;gap:8px;margin-top:8px">
+    <input type="checkbox" id="fork-confirm" />
+    I understand this leaves the old mesh permanently
+  </label>
+  <div class="row" style="margin-top:8px">
+    <button type="button" class="danger" id="fork-submit">Hard fork now</button>
+  </div>
+  <p class="meta" id="fork-msg"></p>
+</div>

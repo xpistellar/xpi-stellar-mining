@@ -66,10 +66,33 @@ export function readState(diskPath, secret) {
   const iv = payload.subarray(0, 12);
   const tag = payload.subarray(12, 28);
   const data = payload.subarray(28);
-  const decipher = createDecipheriv(ALGO, keyFrom(secret), iv);
-  decipher.setAuthTag(tag);
-  const json = Buffer.concat([decipher.update(data), decipher.final()]).toString("utf8");
-  return JSON.parse(json);
+  try {
+    const decipher = createDecipheriv(ALGO, keyFrom(secret), iv);
+    decipher.setAuthTag(tag);
+    const json = Buffer.concat([decipher.update(data), decipher.final()]).toString("utf8");
+    return JSON.parse(json);
+  } catch (err) {
+    const msg = String(err?.message || err);
+    // Node crypto AES-GCM: "Unsupported state or unable to authenticate data"
+    if (/authenticate|Unsupported state|auth/i.test(msg)) {
+      const e = new Error(
+        "Cannot decrypt node disk with the current node key (NODE_DISK_SECRET or data/node-disk.key). " +
+          "This is independent of your Stellar wallet. Path: " + diskPath
+      );
+      e.status = 401;
+      e.code = "DISK_AUTH_FAIL";
+      throw e;
+    }
+    throw err;
+  }
+}
+
+/** Wipe encrypted disk contents (node key). Does not change wallet identity. */
+export function resetDiskData(diskPath, secret) {
+  mkdirSync(dirname(diskPath), { recursive: true });
+  // Prefer explicit secret; callers should pass getNodeDiskSecret()
+  writeState(diskPath, secret, { posts: [], stake: null, modActions: [], roleGrants: [], categories: [] });
+  return diskInfo(diskPath);
 }
 
 export function writeState(diskPath, secret, state) {

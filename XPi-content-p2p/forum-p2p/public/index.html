@@ -1,68 +1,290 @@
 <!doctype html>
-<html lang="vi">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Forum P2P</title>
     <link rel="stylesheet" href="/css/style.css" />
+    <!-- Safe Markdown: parse → sanitize HTML (no raw HTML from users) -->
+    <script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/turndown@7.2.0/dist/turndown.js"></script>
   </head>
   <body>
-    <header>
-      <div>
-        <p class="kicker">local node</p>
-        <h1>Forum phi tập trung</h1>
-      </div>
-      <p id="node" class="meta"></p>
-    </header>
-
-    <section class="panel" id="gate">
-      <h2>Vào node</h2>
-      <form id="session">
-        <label>Secret key Stellar (chỉ gửi tới process local)
-          <input name="secretKey" type="password" placeholder="S..." autocomplete="off" required />
-        </label>
-        <label>Disk cam kết local (GB) — không có trên chain
-          <input name="diskGb" type="number" min="0" step="1" value="100" />
-        </label>
-        <button type="submit">Đọc số dư on-chain</button>
-      </form>
-      <p id="stake" class="meta"></p>
-    </section>
-
-    <section class="layout">
-      <main>
-        <form id="composer" class="panel" hidden>
-          <h2>Topic mới</h2>
-          <input name="title" maxlength="140" placeholder="Tiêu đề" required />
-          <textarea name="body" maxlength="8000" rows="5" placeholder="Nội dung" required></textarea>
-          <button type="submit">Đăng</button>
-          <p id="composer-msg" class="meta"></p>
-        </form>
-        <div id="feed"></div>
-      </main>
-      <aside>
-        <section class="panel">
-          <h2>Xếp hạng</h2>
-          <h3>Top view</h3>
-          <ol id="top-view"></ol>
-          <h3>Top like</h3>
-          <ol id="top-like"></ol>
-          <h3>Top trend</h3>
-          <ol id="top-trend"></ol>
-        </section>
-        <section class="panel">
-          <h2>Stake XLM</h2>
-          <input id="stake-amount" type="number" min="31.4" step="0.1" value="31.4" />
-          <div class="row">
-            <button id="stake-btn" type="button">Stake</button>
-            <button id="unstake-btn" type="button">Unstake</button>
-            <button id="claim" type="button">Claim</button>
+    <div class="topbar">
+      <div class="topbar-inner">
+        <div class="brand">
+          <span class="logo">FP</span>
+          <div>
+            <strong>Forum P2P</strong>
+            <span class="sub" id="node">local node</span>
           </div>
-          <p id="reward" class="meta"></p>
-          <p id="balance" class="meta"></p>
+        </div>
+        <div class="top-actions">
+          <button type="button" class="nav-link nav-forum" id="nav-home">Forum</button>
+          <button type="button" class="btn-connect" id="nav-connect" title="Mesh / signaling">
+            <span class="btn-connect-dot" id="connect-dot"></span>
+            Connect
+          </button>
+          <button type="button" class="nav-link" id="nav-setup-node" title="Claim this node or hard-fork a private mesh">
+            Setup node
+          </button>
+          <button type="button" class="nav-link" id="nav-admin" hidden>My Acc</button>
+          <button type="button" class="nav-link" id="nav-login">Sign in</button>
+          <button type="button" class="nav-link" id="nav-signup">Sign up</button>
+<span id="role-badge" class="badge" hidden></span>
+          <span id="balance" class="meta" style="color:var(--header-text);opacity:.9"></span>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Connect mesh (join): hash + signaling -->
+    <div class="modal-backdrop" id="modal-connect" hidden>
+      <div class="modal">
+        <div class="modal-head">
+          <h2>Connect / Join mesh</h2>
+          <button type="button" class="modal-close" data-close="modal-connect" aria-label="Close">×</button>
+        </div>
+        <p class="meta">Paste <strong>networkHash</strong> + signaling URL. Same hash + overlapping signal = same mesh.</p>
+        <label>Network hash
+          <input id="connect-hash" placeholder="full hash or short id" autocomplete="off" />
+        </label>
+        <label>Signaling URL
+          <input id="connect-signaling" placeholder="https://signal.xgoldmining.com" autocomplete="off" />
+        </label>
+        <p id="connect-msg" class="meta"></p>
+        <div class="row">
+          <button type="button" id="connect-submit">Connect / Join</button>
+          <button type="button" class="secondary" data-close="modal-connect">Cancel</button>
+        </div>
+        <p class="meta" style="margin-top:10px">Need a private mesh? Open <strong>Setup node</strong> → Create / Hard fork.</p>
+      </div>
+    </div>
+
+    <!-- Private node unlock -->
+    <div class="modal-backdrop" id="modal-forum-lock" hidden>
+      <div class="modal">
+        <div class="modal-head">
+          <h2>Private node</h2>
+          <button type="button" class="modal-close" data-close="modal-forum-lock" aria-label="Close">×</button>
+        </div>
+        <p class="meta">This forum node is private. Enter the view password set by the node owner.</p>
+        <label>View password
+          <input type="password" id="forum-unlock-password" autocomplete="current-password" />
+        </label>
+        <div class="row" style="margin-top:10px">
+          <button type="button" id="forum-unlock-btn">Unlock</button>
+        </div>
+        <p class="meta" id="forum-unlock-msg"></p>
+      </div>
+    </div>
+
+    <!-- Sign in / Sign up -->
+    <div class="modal-backdrop" id="modal-auth" hidden>
+      <div class="modal">
+        <div class="modal-head">
+          <h2 id="auth-title">Sign in</h2>
+          <button type="button" class="modal-close" data-close="modal-auth" aria-label="Close">×</button>
+        </div>
+        <p class="meta">Any Stellar secret key works. Disk uses a node key (not your wallet). Super-admins are fixed in code.</p>
+        <form id="session-form" autocomplete="off">
+          <div id="auth-login-block">
+            <label>Secret key (S…)
+              <input name="secretKey" id="auth-secret" type="password" autocomplete="off" placeholder="S…" />
+            </label>
+            <button type="submit" class="btn-block" id="auth-login-btn">Log in</button>
+          </div>
+        </form>
+        <div id="auth-signup-block" style="margin-top:14px">
+          <p class="meta">New wallet?</p>
+          <button type="button" class="secondary btn-block" id="create-wallet-btn">Create wallet in app</button>
+          <p class="meta">Generate a Stellar keypair on this device.</p>
+          <a class="button secondary btn-block" id="buy-xlm-btn" href="https://stellarterm.com/buy-crypto?crypto=xlm&amp;network=stellar" target="_blank" rel="noopener">Buy / fund XLM</a>
+        </div>
+        <div id="login-error" hidden class="admin-card" style="margin-top:12px;border-color:var(--danger)">
+          <p id="login-error-text" style="margin:0;color:var(--danger)"></p>
+        </div>
+        <p id="auth-stake-hint" class="meta" style="margin-top:10px"></p>
+      </div>
+    </div>
+
+<div class="wrap site-shell">
+      <div id="mesh-banner" class="mesh-banner" hidden>
+        <span id="mesh-banner-text">Mesh identity not set</span>
+        <button type="button" class="small secondary" id="mesh-banner-connect">Connect</button>
+      </div>
+      <div id="mesh-meter" class="mesh-meter meta" title="P2P sync meter — works without Sign in">
+        <span id="mesh-meter-signal">Signal: —</span>
+        <span class="mesh-meter-sep">·</span>
+        <span id="mesh-meter-peers">Peers: 0</span>
+        <span class="mesh-meter-sep">·</span>
+        <span id="mesh-meter-channels">Channels: 0</span>
+        <span class="mesh-meter-sep">·</span>
+        <span id="mesh-meter-sync">Last sync: never</span>
+        <button type="button" class="small secondary" id="mesh-force-sync" title="Request posts from peers and push ours">Force sync</button>
+      </div>
+
+<div id="main-layout">
+        <!-- Home leaderboards (above forum index) -->
+        <section class="panel" id="home-leaderboards">
+          <div class="board-head">
+            <h2>Trending on this node</h2>
+            <p class="meta">Top View · Top Like · Top Trend — jump into topics</p>
+          </div>
+          <div class="search-bar row" style="padding:10px 14px;gap:8px;flex-wrap:wrap">
+            <input id="search-q" placeholder="Search title, body, or tag…" style="flex:1;min-width:160px" />
+            <input id="search-tag" placeholder="#tag" style="width:120px" />
+            <select id="search-sort">
+              <option value="trend">Sort: Trend</option>
+              <option value="views">Sort: Views</option>
+              <option value="likes">Sort: Likes</option>
+              <option value="new">Sort: New</option>
+            </select>
+            <button type="button" id="search-btn">Search</button>
+          </div>
+          <div id="search-results" class="topic-list" hidden style="padding:0 12px 12px"></div>
+          <div class="leader-grid">
+            <div class="leader-col">
+              <h3>Top View</h3>
+              <ol id="home-top-view" class="leader-list"></ol>
+            </div>
+            <div class="leader-col">
+              <h3>Top Like</h3>
+              <ol id="home-top-like" class="leader-list"></ol>
+            </div>
+            <div class="leader-col">
+              <h3>Top Trend</h3>
+              <ol id="home-top-trend" class="leader-list"></ol>
+            </div>
+          </div>
+          <div class="tag-cloud-wrap">
+            <h3 class="tag-cloud-title">Top tags</h3>
+            <div id="home-top-tags" class="tag-cloud"></div>
+          </div>
         </section>
-      </aside>
-    </section>
+
+        <!-- Forum index -->
+        <section class="panel" id="view-index">
+          <div class="board-head">
+            <h2>Forums</h2>
+            <p class="meta">Nested categories · sticky · tags · safe Markdown</p>
+          </div>
+          <div id="cat-table" class="panel-body"></div>
+        </section>
+
+        <!-- Category topics -->
+        <div id="view-category" hidden>
+          <div class="layout">
+            <main>
+              <section class="panel">
+                <div class="board-head">
+                  <h2 id="cat-title">Category</h2>
+                  <p class="meta" id="cat-desc"></p>
+                </div>
+                <div class="breadcrumb">
+                  <a href="#" id="back-index">Forum</a>
+                  <span id="crumb-cat"> / …</span>
+                </div>
+
+                <form id="composer" class="composer" hidden>
+                  <h3>New topic</h3>
+                  <input type="hidden" name="categoryId" id="composer-cat" value="general" />
+                  <input name="title" maxlength="140" placeholder="Topic title" required />
+                  <input name="tags" maxlength="120" placeholder="Tags (comma-separated): stellar, p2p, help" />
+                  <label class="row" style="display:flex;gap:8px;align-items:center;color:var(--text)">
+                    <input type="checkbox" name="sticky" id="composer-sticky" style="width:auto" />
+                    Sticky (mods/admins)
+                  </label>
+                  <div class="md-toolbar" id="md-toolbar">
+                    <button type="button" data-md="bold" title="Bold">B</button>
+                    <button type="button" data-md="italic" title="Italic">I</button>
+                    <button type="button" data-md="code" title="Code">`code`</button>
+                    <button type="button" data-md="link" title="Link">Link</button>
+                    <button type="button" data-md="ul" title="List">• List</button>
+                    <button type="button" data-md="preview" title="Preview">Preview</button>
+                  </div>
+                  <textarea name="body" id="composer-body" maxlength="20000" rows="8"
+                    placeholder="Write in Markdown (GitHub-style). Pasted HTML is converted to Markdown."></textarea>
+                  <div class="md-preview" id="md-preview" hidden></div>
+                  <div class="row">
+                    <button type="submit">Post topic</button>
+                    <span id="composer-msg" class="meta"></span>
+                  </div>
+                  <p class="meta">Stored as Markdown · rendered with DOMPurify (XSS-safe).</p>
+                </form>
+
+                <div class="topic-list" id="feed"></div>
+              </section>
+            </main>
+            <aside>
+              <section class="panel">
+                <h2>Rankings</h2>
+                <h3>Top view</h3>
+                <ol id="top-view"></ol>
+                <h3>Top like</h3>
+                <ol id="top-like"></ol>
+                <h3>Top trend</h3>
+                <ol id="top-trend"></ol>
+              </section>
+              <!-- stake moved to My Acc -->
+            </aside>
+          </div>
+        </div>
+
+        <!-- My Acc -->
+        
+        <section class="panel admin-console" id="view-setup" hidden>
+          <div class="board-head">
+            <h2>Setup node</h2>
+            <p class="meta">Claim · access · moderation · create network · hard fork</p>
+          </div>
+          <div id="setup-node-root" class="panel-body setup-node-page">
+            <p class="meta" style="padding:8px">Loading setup panel…</p>
+          </div>
+        </section>
+
+        <section class="panel admin-console" id="view-admin" hidden>
+          <div id="myacc-root">
+            <p class="meta" style="padding:16px">Sign in to open My Account for your role.</p>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    </div><!-- /.site-shell -->
+
+    <footer class="footer" id="site-footer">
+      <div class="footer-main">Forum P2P <span id="footer-version">v0.6.23</span> · multi-signal · nested forums · sticky · tags · Markdown</div>
+      <div class="footer-node meta" id="footer-node-info">Loading node info…</div>
+      <p class="footer-docs meta">
+          <a href="/docs/GIOI-THIEU.md" target="_blank" rel="noopener">Giới thiệu Forum P2P (XPi)</a> · <a href="/docs/ABOUT.md" target="_blank" rel="noopener">About (EN)</a> · <a href="/docs/MODERATION-GUIDE.md" target="_blank" rel="noopener">Moderation guide (EN)</a>
+          ·
+          <a href="#setup-node" id="footer-setup-node">Setup node</a>
+        </p>
+        <details class="footer-help">
+        <summary>Node setup (hash · signal · commands)</summary>
+        <div class="footer-help-body">
+          <p><strong>networkHash</strong> — mesh id (SHA-256). Peers must share the same hash. Genesis creates it; others Join with hash + signaling.</p>
+          <p><strong>Signaling URL</strong> — WebRTC bootstrap (peer discovery through NAT). Prefer a public URL: VPS, Cloudflare Tunnel, or ngrok. Multi-URL: clients try each in order.</p>
+          <p><strong>Common commands</strong></p>
+          <pre class="footer-code"># Forum node
+npm install
+npm start
+# → http://localhost:3000
+
+# Signaling standalone (bootstrap)
+cd signaling-standalone
+npm install
+npm start
+# → http://0.0.0.0:4000  (health: /health)
+
+# Public tunnel
+cloudflared tunnel --url http://127.0.0.1:4000</pre>
+          <p>Download signaling package: <a href="/download/signaling-standalone.zip">signaling-standalone.zip</a> · See <code>CAI-DAT.md</code>, <code>SETUP-MANG.md</code></p>
+        </div>
+      </details>
+    </footer>
     <script src="/js/app.js" type="module"></script>
   </body>
 </html>

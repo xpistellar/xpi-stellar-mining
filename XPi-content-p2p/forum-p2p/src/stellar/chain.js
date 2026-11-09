@@ -25,6 +25,12 @@ export function keypairFrom(secret) {
   return Keypair.fromSecret(String(secret || "").trim());
 }
 
+/** Generate a new Stellar keypair on this device (sign-up). Secret shown once to the user. */
+export function createWallet() {
+  const kp = Keypair.random();
+  return { publicKey: kp.publicKey(), secretKey: kp.secret() };
+}
+
 export function scAddress(publicKey) {
   return nativeToScVal(publicKey, { type: "address" });
 }
@@ -96,7 +102,7 @@ export async function readOnChain(secretKey) {
 
 export async function stakeXlm(secretKey, xlmAmount) {
   const amount = decimalToI128(xlmAmount);
-  if (amount < MIN_STAKE) throw new Error("Tối thiểu 31.4 XLM");
+  if (amount < MIN_STAKE) throw new Error("Minimum 31.4 XLM");
   return invokeContract(secretKey, "stake", [scAddress(keypairFrom(secretKey).publicKey()), scI128(amount)]);
 }
 

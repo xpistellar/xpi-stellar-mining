@@ -1,13 +1,17 @@
 {
   "name": "forum-p2p",
-  "version": "0.2.0",
+  "version": "0.6.23",
   "private": true,
-  "description": "Forum node with Soroban claim-content calls and browser WebRTC sync.",
+  "description": "Forum P2P node — Stellar wallet login, multi-signaling, phpBB-style categories, signed P2P, LocalMod.",
   "type": "module",
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
-    "signaling": "node signaling/server.js"
+    "signaling": "node signaling/server.js",
+    "signaling:standalone": "node signaling-standalone/server.mjs",
+    "pack-signaling": "mkdir -p deploy && cd signaling-standalone && zip -r ../deploy/signaling-standalone.zip . -x 'node_modules/*' && echo packed deploy/signaling-standalone.zip",
+    "install-node": "node scripts/install.mjs",
+    "install-node:yes": "node scripts/install.mjs --yes"
   },
   "engines": {
     "node": ">=18"
