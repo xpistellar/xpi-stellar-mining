@@ -1,3 +1,5 @@
+> **DEPRECATED** — These local contracts (xpi-forum.rs, contract-claimgame.rs) are superseded by the multi-contract system (Staking + Content + ClaimDev + Vault + Distributor). The forum now calls the official deployed contracts. Do not use these files for new deployments.
+
 # XpiLock forum — nâng từ contract-claimgame.rs
 
 File: `contracts/xpi-forum.rs`.

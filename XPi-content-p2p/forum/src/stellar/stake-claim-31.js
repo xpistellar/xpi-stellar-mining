@@ -4,7 +4,7 @@ const readline = require('readline');
 // ================== CẤU HÌNH ==================
 const HORIZON_URL = "https://horizon.stellar.org";
 const SOROBAN_RPC_URL = "https://mainnet.sorobanrpc.com";
-const CONTRACT_ID = "CDQ4OO3FU3CBNVWZX2GDU4BQQNQFAHBITTXULTVIECY4OMJGTM33M73H";
+const CONTRACT_ID = process.env.STAKING_ID || "CCFA55AIBV5JDU3T3D3GTKG5FVMNO2KFQYU56C52JR45I5IDSYBFMCHF";
 const NETWORK_PASSPHRASE = StellarSdk.Networks.PUBLIC;
 const MIN_STAKE_STROOPS = 314_000_000n; // 31.4 XLM
 const FEE = "500000"; // 0.05 XLM inclusion – tăng nếu kẹt
@@ -81,7 +81,7 @@ async function invokeContract(secretKey, functionName, args = [], readOnly = fal
 }
 
 async function main() {
-  console.log("\n===== XPi Lock Staking (contract CDQ4OO3F...) =====\n");
+  console.log("\n===== XPi Lock Staking (contract " + CONTRACT_ID.slice(0, 8) + "...) =====\n");
   console.log("Min stake: 31.4 XLM | Reward ~0.0000003 XPi/day per 31 XLM\n");
 
   const secret = (await ask("Private key (S...): ")).trim();

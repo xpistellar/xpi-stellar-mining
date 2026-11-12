@@ -138,12 +138,14 @@ function setAuthNav() {
   const signup = document.querySelector("#nav-signup");
   const genesis = document.querySelector("#nav-genesis");
   const myAcc = document.querySelector("#nav-admin");
+  const lottery = document.querySelector("#nav-lottery");
   if (login) {
     login.hidden = loggedIn;
     login.textContent = "Sign in";
   }
   if (signup) signup.hidden = loggedIn;
   if (myAcc) myAcc.hidden = !loggedIn; // My Acc only after sign-in
+  if (lottery) lottery.hidden = !loggedIn;
   // Create network merged into Setup node panel
   if (genesis) genesis.hidden = true;
 }
@@ -219,12 +221,9 @@ function wireSetupNodePanel() {
   document.querySelector("#setup-stake-xpi-btn")?.addEventListener("click", async () => {
     const msg = document.querySelector("#setup-reward-msg");
     try {
-      const st = await api("/api/claim-node");
-      if (msg) {
-        msg.textContent = st.stake?.canRunNode
-          ? `Eligible. Hours: ${st.nodeClaim?.hoursHeld ?? 0}/${st.nodeClaim?.needHours ?? 48}`
-          : "Need ≥31.4 XLM + ≥0.0314 XPi on-chain.";
-      }
+      const xpi = document.querySelector("#setup-stake-xpi")?.value || "0.0314";
+      const out = await api("/api/stake-xpi", { method: "POST", body: JSON.stringify({ xpi }) });
+      if (msg) msg.textContent = `XPi staked. On-chain staked: ${out.chain?.xpiStaked || "…"}`;
     } catch (e) {
       if (msg) msg.textContent = e.message;
     }
@@ -389,14 +388,9 @@ document.querySelector("#setup-stake-xlm-btn")?.addEventListener("click", async 
 document.querySelector("#setup-stake-xpi-btn")?.addEventListener("click", async () => {
   const msg = document.querySelector("#setup-reward-msg");
   try {
-    // Soft check via claim-node status / stake snapshot (XPi is on-chain balance, not a local stake tx here)
-    const st = await api("/api/claim-node");
-    const ok = st.stake?.canRunNode;
-    if (msg) {
-      msg.textContent = ok
-        ? `Eligible for node track (XLM + XPi thresholds). Hours held: ${st.nodeClaim?.hoursHeld ?? 0}/${st.nodeClaim?.needHours ?? 48}`
-        : "Not eligible yet — need ≥31.4 XLM staked and ≥0.0314 XPi on-chain (Soroban / balances).";
-    }
+    const xpi = document.querySelector("#setup-stake-xpi")?.value || "0.0314";
+    const out = await api("/api/stake-xpi", { method: "POST", body: JSON.stringify({ xpi }) });
+    if (msg) msg.textContent = `XPi staked. On-chain staked: ${out.chain?.xpiStaked || "…"}`;
   } catch (e) {
     if (msg) msg.textContent = e.message;
   }
@@ -471,6 +465,27 @@ document.querySelector("#nav-signup")?.addEventListener("click", () => {
   document.querySelector("#auth-login-block").hidden = false;
   openModal("modal-auth");
   document.querySelector("#create-wallet-btn")?.focus();
+});
+document.querySelector("#nav-lottery")?.addEventListener("click", async () => {
+  if (!loggedIn) return;
+  const btn = document.querySelector("#nav-lottery");
+  const original = btn?.textContent || "🎰 Lottery";
+  if (btn) btn.textContent = "⏳ Spinning…";
+  try {
+    const out = await api("/api/lottery/trigger", { method: "POST", body: "{}" });
+    alert(out.message || "Success! Daily transfer triggered. You received 0.0000031 XPi.");
+  } catch (e) {
+    const msg = e.message || "";
+    if (msg.includes("Already triggered today") || msg.includes("ALREADY_TRIGGERED")) {
+      alert("Already triggered today. Please come back tomorrow.");
+    } else if (msg.includes("paused") || msg.includes("PAUSED")) {
+      alert("Lottery is currently paused.");
+    } else {
+      alert("Could not trigger today. Someone may have already claimed it, or try again later.");
+    }
+  } finally {
+    if (btn) btn.textContent = original;
+  }
 });
 document.querySelector("#nav-genesis")?.addEventListener("click", () => openSetupNodeModal());
 // legacy

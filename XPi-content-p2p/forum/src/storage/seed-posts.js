@@ -119,7 +119,7 @@ Phishing UIs can point at look-alike contracts. Your keys sign **whatever contra
 
 ### Reference identifiers (from public docs)
 
-- **Contract**: \`CDQ4OO3FU3CBNVWZX2GDU4BQQNQFAHBITTXULTVIECY4OMJGTM33M73H\`
+- **Contracts**: Staking \`CCFA55AIBV5JDU3T3D3GTKG5FVMNO2KFQYU56C52JR45I5IDSYBFMCHF\` · Content \`CCENQ25MNJUENBZ3JTD7PESKYTCUT6E3XR535734VTKLN6AFJ473IQBV\`
 - **Issuer**: \`GDOFJEZ3FUWAC2EVHPRMJPSWPOD3KJF7FTXFZIERFFPB2VMTRQLZFUEF\`
 
 Cross-check against the official GitHub repository and Stellar expert / explorer pages.

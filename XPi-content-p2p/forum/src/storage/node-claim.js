@@ -68,7 +68,7 @@ export function nodeClaimStatus(publicKey, canRunNode, now = Date.now()) {
     rewardLamports: 31,
     totalClaimed: row.totalClaimed || "0",
     note:
-      "Local claim_node until the Soroban contract exposes an on-chain node reward. Soroban cannot verify that your forum process is online.",
+      "On-chain claim_node via Content contract (requires ≥0.0314 XPi staked on Staking + 24h cooldown). Local ledger is display cache only.",
   };
 }
 

@@ -30,6 +30,15 @@ import {
   readOnChain,
   stakeXlm,
   unstakeXlm,
+  stakeXpi,
+  unstakeXpi,
+  payForTopic,
+  likePost,
+  claimNode,
+  triggerDaily,
+  canTriggerToday,
+  makeContentHash,
+  makePostId,
 } from "../stellar/chain.js";
 import {
   claimAdminIfEmpty,
@@ -105,13 +114,17 @@ export function mountRoutes(app, ctx) {
     res.json({
       ok: true,
       accessMode: getAccessConfig().mode,
-      version: "0.6.23",
+      version: "0.7.0",
       nodeId: config.nodeId,
       signalingUrl: signals[0] || config.signalingUrl,
       signalingWs: signalingWsUrl(signals[0] || config.signalingUrl),
       signalingUrls: signals,
       signalingWsUrls: signalingWsUrls(),
       contractId: config.contractId || null,
+      stakingId: config.stakingId,
+      contentId: config.contentId,
+      xpiSac: config.xpiSac,
+      distId: config.distId,
       network: config.network,
       viewMilestone: config.viewMilestone,
       publicKey: ctx.session.publicKey || null,
@@ -159,7 +172,7 @@ export function mountRoutes(app, ctx) {
     const signals = getSignalingList();
     res.json({
       ok: true,
-      version: "0.6.23",
+      version: "0.7.0",
       nodeId: config.nodeId,
       networkShort: net.networkShort || null,
       networkLabel: net.networkLabel || null,
@@ -318,7 +331,9 @@ export function mountRoutes(app, ctx) {
         xlm: chain.xlm,
         staked: chain.stake,
         pending: chain.pending,
-        xpi: chain.xpi || chain.pending,
+        xpiStaked: chain.xpiStaked,
+        hasMinStake: chain.hasMinStake,
+        isPlayerEligible: chain.isPlayerEligible,
         topicFee: config.topicFee,
       });
       db.stake = snap;
@@ -472,7 +487,9 @@ export function mountRoutes(app, ctx) {
         xlm: chain.xlm,
         staked: chain.stake,
         pending: chain.pending,
-        xpi: chain.xpi || chain.pending,
+        xpiStaked: chain.xpiStaked,
+        hasMinStake: chain.hasMinStake,
+        isPlayerEligible: chain.isPlayerEligible,
         topicFee: config.topicFee,
       });
       snap.stakeSource = chain.stakeSource;
@@ -1071,12 +1088,23 @@ export function mountRoutes(app, ctx) {
 
       const check = await moderate(`${title}\n${body}`);
       if (!check.ok) return res.status(400).json({ error: check.reason });
-      if (!canAfford(ctx.session.balance, config.topicFee)) {
-        return res.status(402).json({ error: "insufficient XLM" });
+
+      // On-chain topic fee via Content.pay_for_topic
+      const onChainPostId = makePostId();
+      const contentHash = makeContentHash(title, body);
+      let topicTx = null;
+      try {
+        topicTx = await payForTopic(ctx.session.secretKey, onChainPostId, contentHash);
+      } catch (e) {
+        return res.status(402).json({
+          error: `On-chain topic fee failed: ${e.message}`,
+          code: "TOPIC_FEE_FAILED",
+        });
       }
-      ctx.session.balance = String(Number(ctx.session.balance) - Number(config.topicFee));
+
       const post = {
         id: randomUUID(),
+        onChainPostId: String(onChainPostId),
         title,
         body,
         author: keypair.publicKey(),
@@ -1088,7 +1116,7 @@ export function mountRoutes(app, ctx) {
         earned: "0",
         createdAt: Date.now(),
         claimedViews: 0,
-        topicTx: null,
+        topicTx: topicTx?.hash || null,
         status: "active",
         format: "markdown",
         comments: [],
@@ -1096,7 +1124,7 @@ export function mountRoutes(app, ctx) {
       post.signature = signPost(ctx.session.secretKey, post);
       db.posts.unshift(post);
       persist(db);
-      res.json({ ok: true, post, balance: ctx.session.balance, tx: null });
+      res.json({ ok: true, post, balance: ctx.session.balance, tx: topicTx });
     } catch (error) {
       next(error);
     }
@@ -1181,14 +1209,24 @@ export function mountRoutes(app, ctx) {
       }
       const post = db.posts.find((p) => p.id === req.params.id);
       if (!post || post.status === "deleted") return res.status(404).json({ error: "not found" });
-      if (!canAfford(ctx.session.balance, config.likeFee)) {
-        return res.status(402).json({ error: "insufficient XLM" });
+      if (!post.onChainPostId) {
+        return res.status(400).json({ error: "Post has no on-chain id (created before upgrade)", code: "NO_ONCHAIN_ID" });
       }
-      ctx.session.balance = String(Number(ctx.session.balance) - Number(config.likeFee));
+
+      let likeTx = null;
+      try {
+        likeTx = await likePost(ctx.session.secretKey, BigInt(post.onChainPostId));
+      } catch (e) {
+        return res.status(402).json({
+          error: `On-chain like failed: ${e.message}`,
+          code: "LIKE_FAILED",
+        });
+      }
+
       post.likes += 1;
       post.earned = config.likeFee;
       persist(db);
-      res.json({ ok: true, post, balance: ctx.session.balance, tx: null });
+      res.json({ ok: true, post, balance: ctx.session.balance, tx: likeTx });
     } catch (error) {
       next(error);
     }
@@ -1427,8 +1465,8 @@ export function mountRoutes(app, ctx) {
   });
 
   /**
-   * Local node-operator reward (31 lamports XPi / day) after 48h continuous eligibility.
-   * Not an on-chain tx until the contract ships claim_node.
+   * On-chain node reward via Content.claim_node.
+   * Requires get_xpi_staked >= 0.0314 on Staking + 24h cooldown (enforced by contract).
    */
   app.post("/api/claim-node", async (req, res, next) => {
     try {
@@ -1441,38 +1479,46 @@ export function mountRoutes(app, ctx) {
           code: "FORBIDDEN",
         });
       }
-      // refresh chain stake
+      // refresh chain
       let chain;
       try {
         chain = await readOnChain(ctx.session.secretKey);
       } catch {
-        chain = { xlm: "0", stake: db.stake?.staked || "0", pending: db.stake?.pending || "0" };
+        chain = { xlm: "0", stake: db.stake?.staked || "0", pending: "0", xpiStaked: "0", hasMinStake: false };
       }
-      const { stakeSnapshot } = await import("../stellar/stake.js");
       const snap = stakeSnapshot({
         address: ctx.session.publicKey,
         xlm: chain.xlm,
         staked: chain.stake,
         pending: chain.pending,
-        xpi: chain.xpi || chain.pending,
+        xpiStaked: chain.xpiStaked,
+        hasMinStake: chain.hasMinStake,
+        isPlayerEligible: chain.isPlayerEligible,
         topicFee: config.topicFee,
       });
       db.stake = snap;
       persist(db);
-      touchEligibility(ctx.session.publicKey, Boolean(snap.canRunNode));
-      const status = nodeClaimStatus(ctx.session.publicKey, Boolean(snap.canRunNode));
-      if (!status.canClaimNow) {
+
+      if (!snap.canRunNode) {
         return res.status(400).json({
-          error: !snap.canRunNode
-            ? "Need ≥31.4 XLM and ≥0.0314 XPi on-chain eligibility to claim node reward"
-            : !status.ready48h
-              ? `Keep eligibility for ${status.needHours}h (now ${status.hoursHeld}h)`
-              : "Already claimed in the last 24h",
+          error: "Need ≥31.4 XLM (has_min_stake) and ≥0.0314 XPi staked on Staking to claim node reward",
           code: "NOT_READY",
-          nodeClaim: status,
           stake: snap,
         });
       }
+
+      let tx;
+      try {
+        tx = await claimNode(ctx.session.secretKey);
+      } catch (e) {
+        return res.status(400).json({
+          error: `On-chain claim_node failed: ${e.message}`,
+          code: "CLAIM_FAILED",
+          stake: snap,
+        });
+      }
+
+      // Update local cache for display
       const after = recordNodeClaim(ctx.session.publicKey);
       res.json({
         ok: true,
@@ -1480,10 +1526,74 @@ export function mountRoutes(app, ctx) {
         lamports: after.rewardLamports,
         nodeClaim: after,
         stake: snap,
-        onChain: false,
-        note: after.note,
+        onChain: true,
+        tx,
       });
     } catch (error) {
+      next(error);
+    }
+  });
+
+  app.post("/api/stake-xpi", async (req, res, next) => {
+    try {
+      requireKey();
+      const tx = await stakeXpi(ctx.session.secretKey, req.body?.xpi || "0.0314");
+      const chain = await readOnChain(ctx.session.secretKey);
+      ctx.session.balance = chain.xlm;
+      res.json({ ok: true, tx, chain });
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  app.post("/api/unstake-xpi", async (req, res, next) => {
+    try {
+      requireKey();
+      const tx = await unstakeXpi(ctx.session.secretKey, req.body?.xpi);
+      const chain = await readOnChain(ctx.session.secretKey);
+      ctx.session.balance = chain.xlm;
+      res.json({ ok: true, tx, chain });
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  // Lottery / Xổ số may mắn — permissionless trigger_daily on Distributor
+  app.get("/api/lottery/status", async (req, res) => {
+    try {
+      requireKey();
+      const can = await canTriggerToday(ctx.session.secretKey);
+      res.json({ ok: true, canTrigger: can, reward: "0.0000031" });
+    } catch (error) {
+      res.status(401).json({ error: error.message });
+    }
+  });
+
+  app.post("/api/lottery/trigger", async (req, res, next) => {
+    try {
+      requireKey();
+      const tx = await triggerDaily(ctx.session.secretKey);
+      res.json({
+        ok: true,
+        message: "Daily transfer triggered successfully. You received 0.0000031 XPi (if the reward pool had enough balance).",
+        tx,
+        reward: "0.0000031",
+      });
+    } catch (error) {
+      const msg = String(error.message || error);
+      // Friendly messages for common cases
+      if (msg.includes("already triggered today") || msg.includes("UnreachableCodeReached")) {
+        return res.status(400).json({
+          error: "Already triggered today. Please try again tomorrow.",
+          code: "ALREADY_TRIGGERED",
+        });
+      }
+      if (msg.includes("paused")) {
+        return res.status(400).json({
+          error: "Lottery is currently paused.",
+          code: "PAUSED",
+        });
+      }
       next(error);
     }
   });

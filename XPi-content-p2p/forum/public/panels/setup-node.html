@@ -61,11 +61,12 @@
 
 <div class="admin-card" style="margin-top:12px">
   <h3>D) Node reward eligibility</h3>
-  <p class="meta">≥31.4 XLM staked and ≥0.0314 XPi on-chain, ~48h, then claim_node (local ledger until on-chain).</p>
+  <p class="meta">≥31.4 XLM staked (has_min_stake) and ≥0.0314 XPi staked on Staking for claim_node. Claim is on-chain via Content.</p>
   <div class="row">
     <input id="setup-stake-xlm" type="number" min="31.4" step="0.1" value="31.4" style="max-width:120px" />
     <button type="button" id="setup-stake-xlm-btn">Stake 31.4 XLM</button>
-    <button type="button" class="secondary" id="setup-stake-xpi-btn">Check XPi (0.0314)</button>
+    <input id="setup-stake-xpi" type="number" min="0.0314" step="0.0001" value="0.0314" style="max-width:140px" />
+    <button type="button" class="secondary" id="setup-stake-xpi-btn">Stake XPi</button>
     <button type="button" id="setup-claim-reward">Claim node reward</button>
   </div>
   <p class="meta" id="setup-reward-msg"></p>

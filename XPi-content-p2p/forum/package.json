@@ -1,6 +1,6 @@
 {
   "name": "forum-p2p",
-  "version": "0.6.23",
+  "version": "0.7.0",
   "private": true,
   "description": "Forum P2P node — Stellar wallet login, multi-signaling, phpBB-style categories, signed P2P, LocalMod.",
   "type": "module",

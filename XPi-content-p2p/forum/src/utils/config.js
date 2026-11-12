@@ -49,7 +49,16 @@ export const config = {
   topicFee: process.env.TOPIC_FEE || "0.0000021",
   likeFee: process.env.LIKE_FEE || "0.0000001",
   viewMilestone: Number(process.env.VIEW_MILESTONE || 1_000_000),
-  contractId: process.env.CONTRACT_ID || "CDQ4OO3FU3CBNVWZX2GDU4BQQNQFAHBITTXULTVIECY4OMJGTM33M73H",
+  // Multi-contract addresses (new architecture)
+  stakingId: process.env.STAKING_ID || "CCFA55AIBV5JDU3T3D3GTKG5FVMNO2KFQYU56C52JR45I5IDSYBFMCHF",
+  contentId: process.env.CONTENT_ID || "CCENQ25MNJUENBZ3JTD7PESKYTCUT6E3XR535734VTKLN6AFJ473IQBV",
+  xpiSac: process.env.XPI_SAC || "CAKQOAJY46GIXT36XJXATTBTRERL66LGLPZUWSXODE6D2LPEZYH6TY2C",
+  claimDevId: process.env.CLAIM_DEV_ID || "CC5K5A262IL2UQ77AV5CSF6MIXKAY3VYPIBRXHLBVLRSH23S7BTSN4MP",
+  stakingLendingId: process.env.STAKING_LENDING_ID || "CCB7IHYOBU4ZTRMATPKWFZDUZLHQ4R2RJCRXRRSR5HFK662U66HVJQ6Y",
+  vaultId: process.env.VAULT_ID || "CBITFBHST6O5QCKVJ3T7G3FL4B76FHFRZXHRDNGMMIKBML7USIFXBXAT",
+  distId: process.env.DIST_ID || "CC6NOS2KVU3FJMYRWERZED3DVJPJ3OGOZ67UZLE5LSCGUQQY5MERAMKI",
+  // Legacy single contractId kept for compatibility (points to staking)
+  contractId: process.env.CONTRACT_ID || process.env.STAKING_ID || "CCFA55AIBV5JDU3T3D3GTKG5FVMNO2KFQYU56C52JR45I5IDSYBFMCHF",
   horizonUrl: process.env.HORIZON_URL || "https://horizon.stellar.org",
   rpcUrl: process.env.SOROBAN_RPC_URL || "https://mainnet.sorobanrpc.com",
   fee: process.env.TX_FEE || "500000",
