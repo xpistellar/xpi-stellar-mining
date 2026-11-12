@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">XPI Mining</string>
-    <string name="login_title">XPI Mining</string>
+    <string name="app_name">XPI Staking Mining</string>
+    <string name="login_title">XPI Staking Mining</string>
     <string name="login_subtitle">Sign in with Stellar secret key (S…)</string>
     <string name="secret_key">Secret key</string>
     <string name="login">Sign in</string>
     <string name="language">Language</string>
     <string name="logout">Log out</string>
     <string name="tab_mining">Mining</string>
+    <string name="tab_banking">Banking</string>
+    <string name="tab_node">Node / Forum</string>
     <string name="tab_faq">FAQ</string>
     <string name="tab_games">Games</string>
     <string name="wallet_assets">Wallet assets</string>
@@ -28,7 +30,8 @@
     <string name="faq_title">FAQ</string>
     <string name="faq_body">Q: How do I create a wallet?\nA: Tap Sign up on the login screen (StellarTerm). Create a key pair, save the private key (S…) safely, then paste it here to log in.\n\nQ: How do I buy XLM?\nA: On StellarTerm, use the exchange to buy XLM, or send XLM from an exchange to your new Stellar public key (G…).\n\nQ: How do I add the XPi trustline?\nA: Open albedo.link → Add trustline → search for XPi from xgoldmining.com → confirm so your wallet can hold XPi rewards.\n\nQ: What is XPI Mining?\nA: Lock XLM in a Soroban contract to earn XPi over time.\n\nQ: Minimum stake?\nA: 31.4 XLM.\n\nQ: How does the counter work?\nA: The live counter is an estimate for UX. Real rewards accrue on-chain; use Claim to receive them.\n\nQ: Is XLM locked?\nA: Yes. Unstake returns XLM to your wallet.\n\nQ: Network fees?\nA: Each transaction costs a small XLM fee on Stellar.\n\nQ: Is XPi the same as Pi Network?\nA: No. XPi is on-chain Stellar crypto you can use right away — not Pi Network.</string>
     <string name="games_title">Games</string>
-    <string name="games_body">Play partner games and grow your XPi ecosystem.\n\n• Coming soon: mini-games linked to XPi rewards.\n• Stake XLM on the Mining tab to unlock higher participation.\n\nCheck updates in future app versions for download links.</string>
+    <string name="games_body"># XPI Space Mining\n\nPlay the classic XPI Space Mining hangar and combat experience, then earn **XPi** tokens on the Stellar network. Stake XLM into a Soroban smart contract and claim rewards directly from the game.\n\n## Key Features\n\n- Full XPI Space Mining gameplay — Crew selection, ship upgrades, hangar, and combat runs.\n- Stellar wallet login — Sign in with your Stellar secret key (S…).\n- Create wallet in-app — Generate a new Stellar key pair.\n- Wallet screen — Stake, unstake, claim.\n- In-game claim — XPi Core triggers claim_game (max 10/day, ≥ 31.4 XLM).\n\n## How It Works\n\n1. Launch and log in.\n2. Stake at least 31.4 XLM.\n3. Play the game.\n4. Claim rewards on-chain.\n\nStaking (trung tâm): CCFA55AIBV5JDU3T3D3GTKG5FVMNO2KFQYU56C52JR45I5IDSYBFMCHF
+ClaimDev: CC5K5A262IL2UQ77AV5CSF6MIXKAY3VYPIBRXHLBVLRSH23S7BTSN4MP</string>
     <string name="lang_en">English</string>
     <string name="lang_vi">Tiếng Việt</string>
     <string name="lang_ja">日本語</string>
@@ -37,6 +40,7 @@
     <string name="signup_button">Sign up — create Stellar wallet</string>
     <string name="signup_hint">On StellarTerm: create a key pair, save your private key (S…) offline, then paste that private key below to log in.</string>
     <string name="tab_wallet">Wallet</string>
+    <string name="tab_dex">DEX</string>
     <string name="create_wallet">Create new Stellar wallet</string>
     <string name="create_wallet_hint">Generates a key pair on this device. You must save the secret key — it is shown only once.</string>
     <string name="wallet_created_title">Wallet created — SAVE YOUR SECRET</string>

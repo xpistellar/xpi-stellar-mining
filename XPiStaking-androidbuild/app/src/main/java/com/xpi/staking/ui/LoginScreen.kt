@@ -59,6 +59,7 @@ fun LoginScreen(
     val uiState by viewModel.uiState.collectAsState()
     val loading = uiState is StakingViewModel.UiState.Loading
     val error = (uiState as? StakingViewModel.UiState.Error)?.message
+        ?.takeUnless { it.startsWith("DEX") }
     val created = uiState as? StakingViewModel.UiState.WalletCreated
     val langLabel = LocaleHelper.languages.firstOrNull { it.first == currentLang }?.second ?: "English"
 

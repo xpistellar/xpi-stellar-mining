@@ -8,6 +8,8 @@
     <string name="language">言語</string>
     <string name="logout">ログアウト</string>
     <string name="tab_mining">マイニング</string>
+    <string name="tab_banking">Banking</string>
+    <string name="tab_node">Node / Forum</string>
     <string name="tab_faq">FAQ</string>
     <string name="tab_games">ゲーム</string>
     <string name="wallet_assets">ウォレット資産</string>

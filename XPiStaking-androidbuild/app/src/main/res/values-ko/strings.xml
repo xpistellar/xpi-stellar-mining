@@ -8,6 +8,8 @@
     <string name="language">언어</string>
     <string name="logout">로그아웃</string>
     <string name="tab_mining">마이닝</string>
+    <string name="tab_banking">Banking</string>
+    <string name="tab_node">Node / Forum</string>
     <string name="tab_faq">FAQ</string>
     <string name="tab_games">게임</string>
     <string name="wallet_assets">지갑 자산</string>

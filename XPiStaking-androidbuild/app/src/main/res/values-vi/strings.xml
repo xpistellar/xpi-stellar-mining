@@ -8,6 +8,8 @@
     <string name="language">Ngôn ngữ</string>
     <string name="logout">Đăng xuất</string>
     <string name="tab_mining">Mining</string>
+    <string name="tab_banking">Banking</string>
+    <string name="tab_node">Node / Forum</string>
     <string name="tab_faq">FAQ</string>
     <string name="tab_games">Games</string>
     <string name="wallet_assets">Tài sản ví</string>

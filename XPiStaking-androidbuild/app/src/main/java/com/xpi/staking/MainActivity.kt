@@ -31,13 +31,13 @@ class MainActivity : ComponentActivity() {
             XPiStakingTheme {
                 val vm: StakingViewModel = viewModel()
                 val uiState by vm.uiState.collectAsState()
+                // Sticky: Error/Success must NOT send user back to login
                 var publicKey by remember { mutableStateOf<String?>(null) }
 
-                if (uiState is StakingViewModel.UiState.LoggedIn) {
-                    publicKey = (uiState as StakingViewModel.UiState.LoggedIn).publicKey
-                }
-                if (uiState is StakingViewModel.UiState.Idle) {
-                    publicKey = null
+                when (val s = uiState) {
+                    is StakingViewModel.UiState.LoggedIn -> publicKey = s.publicKey
+                    is StakingViewModel.UiState.Idle -> publicKey = null
+                    else -> Unit
                 }
 
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->

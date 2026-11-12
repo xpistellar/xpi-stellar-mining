@@ -8,6 +8,8 @@
     <string name="language">Langue</string>
     <string name="logout">Deconnexion</string>
     <string name="tab_mining">Mining</string>
+    <string name="tab_banking">Banking</string>
+    <string name="tab_node">Node / Forum</string>
     <string name="tab_faq">FAQ</string>
     <string name="tab_games">Jeux</string>
     <string name="wallet_assets">Actifs du portefeuille</string>
