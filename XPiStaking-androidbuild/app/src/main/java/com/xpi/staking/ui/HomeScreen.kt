@@ -26,6 +26,9 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -301,19 +304,6 @@ private fun MiningTab(viewModel: StakingViewModel) {
                     label = { Text(stringResource(R.string.amount_xlm)) },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true
-                )
-                OutlinedTextField(
-                    value = referral,
-                    onValueChange = { referral = it },
-                    label = { Text("Referral (G… referrer address — optional)") },
-                    modifier = Modifier.fillMaxWidth(),
-                    singleLine = true,
-                    supportingText = {
-                        Text(
-                            "Enter the referrer address. The current contract does not yet bind referral on-chain; the info is stored in the app for future upgrades / community use.",
-                            fontSize = 11.sp
-                        )
-                    }
                 )
                 Button(
                     onClick = { viewModel.stake(stakeAmount) },
@@ -802,19 +792,83 @@ private fun WalletTab(viewModel: StakingViewModel, publicKey: String) {
         Card(modifier = Modifier.fillMaxWidth()) {
             Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(stringResource(R.string.send), fontWeight = FontWeight.SemiBold)
-                OutlinedTextField(value = dest, onValueChange = { dest = it }, label = { Text(stringResource(R.string.destination_g)) }, modifier = Modifier.fillMaxWidth(), singleLine = true)
-                OutlinedTextField(value = amount, onValueChange = { amount = it }, label = { Text(stringResource(R.string.amount)) }, modifier = Modifier.fillMaxWidth(), singleLine = true)
-                OutlinedTextField(value = selectedAsset, onValueChange = { selectedAsset = it }, label = { Text(stringResource(R.string.asset_code)) }, modifier = Modifier.fillMaxWidth(), singleLine = true)
-                OutlinedTextField(value = memo, onValueChange = { memo = it }, label = { Text(stringResource(R.string.memo_optional)) }, modifier = Modifier.fillMaxWidth(), singleLine = true)
+                OutlinedTextField(
+                    value = dest,
+                    onValueChange = { dest = it },
+                    label = { Text(stringResource(R.string.destination_g)) },
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = true
+                )
+                OutlinedTextField(
+                    value = amount,
+                    onValueChange = { amount = it },
+                    label = { Text(stringResource(R.string.amount)) },
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = true
+                )
+                // Asset select from balances only (avoid wrong issuer / typos)
+                val assetOptions = remember(balances) {
+                    val keys = balances.keys.filter { it != "Error" }.toList()
+                    if (keys.isEmpty()) listOf("XLM") else keys
+                }
+                LaunchedEffect(assetOptions) {
+                    if (selectedAsset !in assetOptions) {
+                        selectedAsset = assetOptions.firstOrNull() ?: "XLM"
+                    }
+                }
+                var assetExpanded by remember { mutableStateOf(false) }
+                ExposedDropdownMenuBox(
+                    expanded = assetExpanded,
+                    onExpandedChange = { assetExpanded = it }
+                ) {
+                    OutlinedTextField(
+                        value = selectedAsset,
+                        onValueChange = {},
+                        readOnly = true,
+                        label = { Text("Asset (from wallet)") },
+                        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = assetExpanded) },
+                        supportingText = {
+                            val bal = balances[selectedAsset]
+                            if (bal != null) Text("Balance: $bal")
+                        },
+                        modifier = Modifier
+                            .menuAnchor()
+                            .fillMaxWidth(),
+                        singleLine = true
+                    )
+                    ExposedDropdownMenu(
+                        expanded = assetExpanded,
+                        onDismissRequest = { assetExpanded = false }
+                    ) {
+                        assetOptions.forEach { code ->
+                            val bal = balances[code] ?: "—"
+                            DropdownMenuItem(
+                                text = { Text("$code  ·  $bal") },
+                                onClick = {
+                                    selectedAsset = code
+                                    assetExpanded = false
+                                }
+                            )
+                        }
+                    }
+                }
+                OutlinedTextField(
+                    value = memo,
+                    onValueChange = { memo = it },
+                    label = { Text(stringResource(R.string.memo_optional)) },
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = true
+                )
                 Button(
                     onClick = { viewModel.sendPayment(dest, amount, selectedAsset, memo) },
-                    enabled = !loading,
+                    enabled = !loading && assetOptions.isNotEmpty(),
                     modifier = Modifier.fillMaxWidth()
                 ) { Text(stringResource(R.string.send)) }
             }
         }
     }
 }
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
